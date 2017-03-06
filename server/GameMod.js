@@ -51,6 +51,17 @@ class GameMod {
 
     this.timerId = 0
     this.timeLeft = 0
+
+    // we might want other stuff like
+    // this.gameRunning = true/false
+    // this.gameOver = true/false
+    // etc
+
+    // todo: log into the firebase so this new game mod is authorized to alter db. we can do it anonymously, but its probably better to do credentialed login? depends on how much we want to secure editing permissions
+
+    // firebase.auth().signInWithEmailAndPassword(email, password)
+    // .then(() => do something or another or nothing )
+
   }
 
   startGame() {
