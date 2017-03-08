@@ -46,7 +46,7 @@ class GameMod {
     this.teamA = []
     this.teamB = []
     this.round = 0
-    this.sprint = 0
+    // this.sprint = 0
     this.sprintDuration = 120 // hardcoded for now
 
     this.timerId = 0
@@ -74,7 +74,8 @@ class GameMod {
     */
   }
 
-  startTimer() {
+  startTimer(duration) {
+    this.timeLeft = duration
     this.timer = setInterval(this.tick, 1000)
   }
 
@@ -84,23 +85,17 @@ class GameMod {
 
   }
 
-  tick() {
+  tick() { //a public tick that's broadcasted to everyone
     // as long as there's more than 0 seconds left, tick away
-    if (!this.timeLeft) {
-      this.endSprint()
-    }
-    else {
-      this.timeLeft = this.timeLeft--
-
-      // assuming that database = firebase.database()
-      // this is going to run down the timer every second. all players in this game should be subscribed to changes on this key!
-      database.ref(`sprints/${this.id}/timeRemaining`).set(this.timeLeft)
-    }
+    if (!this.timeLeft) this.endSprint()
+    else this.timeLeft = this.timeLeft--
+    // assuming that database = firebase.database()
+    // this is going to run down the timer every second. all players in this game should be subscribed to changes on this key!
+    database.ref(`sprints/${this.id}/timeRemaining`).set(this.timeLeft)
   }
 
   startSprint() {
-    // the timer is reset with the full length of time
-    this.timeLeft = this.sprintDuration
+
     // todo: next person is up ... update firebase with their name in the right spot
 
     // todo: set up a listener for their guesses with a function to check if they're right (??)
@@ -109,8 +104,8 @@ class GameMod {
 
     // todo: if ALL the words have been guessed, end the sprint and the round immediately
 
-    // start the timer!
-    this.startTimer()
+    // start the timer with the right amount of time
+    this.startTimer(this.sprintDuration)
   }
 
   endSprint() {
@@ -123,17 +118,28 @@ class GameMod {
   }
 
   startRound() {
-    this.round++
-    // todo: update this on firebase. say the round is started. react components should be listening for this and the frontend can post the right view and instructions....
+    this.round = this.round++
+
+    // mix the bag o words up and the order of people
+    this.words = shuffle(this.words)
+    this.teamA = shuffle(this.teamA)
+    this.teamB = shuffle(this.teamB)
+
+    // todo: update all of these things on firebase. say the round is started. react components should be listening for this and the frontend can post the right view and instructions....
+
+    // the round is ready to roll. wait for people to respond to start a sprint
   }
 
   endRound() {
     // todo: update firebase. clientside react should get database info and show the results of the last round / points, etc
+
     // todo: server should wait for everyone to say 'OK' or time out and move on
+
   }
 
   endGame() {
     // todo: game over.
+
   }
 
 }
