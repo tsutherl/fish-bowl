@@ -1,26 +1,16 @@
 import React, { Component } from 'react';
 import {browserHistory} from 'react-router'
 
-export default class CreateGame extends Component {
-  componentDidMount() {
-  
-
-  }
-
-  createGame(){
-
-  }
-
-
-  render() { 
+export const CreateGame = props => {
+  const {createGame, handleChange} = props
     return (
-       <form onSubmit={(evt)=>{evt.preventDefault()}}>
-        <input name="username" placeholder="Username"/>
-        <input name="gameCode" placeholder="Game Code"/>
-        <input type="submit" value="Join" />
+       <form onSubmit={createGame}>
+        <input name="name" id="name" placeholder="Game Name" onChange={handleChange}/>
+        <input name="rounds" placeholder="Additional Rounds" onChange={handleChange}/>
+        <input name="duration" placeholder="Round Duration" onChange={handleChange}/>
+        <input type="submit" value="CREATE GAME" />
       </form>
     )
-  }
 }
 
 

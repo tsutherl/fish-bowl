@@ -7,7 +7,7 @@ import {connect, Provider} from 'react-redux'
 import store from './store'
 import Jokes from './components/Jokes'
 import HomeScreen from './components/HomeScreen'
-import CreateGame from './components/CreateGame'
+import CreateGameContainer from './containers/CreateGameContainer'
 import JoinGame from './components/JoinGame'
 import WhoAmI from './components/WhoAmI'
 import keys from 'APP/keys.js'
@@ -59,8 +59,8 @@ render (
     <Router history={browserHistory}>
       <Route path="/" onEnter={authUser}>
         <IndexRoute component={HomeScreen}/>
-        <Route path="/join" component={JoinGame}></Route>
-        <Route path="/createGame" component={CreateGame}></Route>
+        <Route path="join" component={JoinGame}></Route>
+        <Route path="createGame" component={CreateGameContainer}></Route>
       </Route>
     </Router>
   </Provider>,
