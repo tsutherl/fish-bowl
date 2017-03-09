@@ -8,6 +8,7 @@ import store from './store'
 import Jokes from './components/Jokes'
 import HomeScreen from './components/HomeScreen'
 import CreateGameContainer from './containers/CreateGameContainer'
+import CodeView from './components/CodeView'
 import JoinGame from './components/JoinGame'
 import WhoAmI from './components/WhoAmI'
 import keys from 'APP/keys.js'
@@ -61,6 +62,7 @@ render (
         <IndexRoute component={HomeScreen}/>
         <Route path="join" component={JoinGame}></Route>
         <Route path="createGame" component={CreateGameContainer}></Route>
+        <Route path="code" component={CodeView}></Route>
       </Route>
     </Router>
   </Provider>,

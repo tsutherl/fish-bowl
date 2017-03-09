@@ -7,11 +7,6 @@ export default class JoinGame extends Component {
 
   }
 
-  createGame(){
-
-  }
-
-
   render() { 
     return (
       <form onSubmit={(evt)=>{evt.preventDefault()}}>

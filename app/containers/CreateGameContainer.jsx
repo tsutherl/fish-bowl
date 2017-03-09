@@ -1,12 +1,16 @@
+import axios from 'axios'
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {CreateGame} from '../components/CreateGame'
+import {setGame} from '../reducers/game'
 
-export default class CreateGameContainer extends Component {
+
+export class CreateGameContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      code: '',
       name: '',
       rounds: '',
       duration: ''
@@ -17,6 +21,14 @@ export default class CreateGameContainer extends Component {
 
   createGame(evt) {
     evt.preventDefault()
+    axios.get('/api/games/code')
+    .then(res => res.data)
+    .then(code => {
+      console.log("THIS IS MY GAME CODE: ", code)
+      this.setState({code})
+      this.props.makeGame(this.state)
+      browserHistory.push('/code')
+    })
 
   }
 
@@ -46,3 +58,13 @@ export default class CreateGameContainer extends Component {
     );
   }
 }
+
+export default connect(
+  (state) => ({}),
+  (dispatch) => ({
+    makeGame: (game) => {
+      dispatch(setGame(game))
+    }
+  })
+)(CreateGameContainer)
+
