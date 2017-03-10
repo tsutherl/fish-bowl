@@ -6,13 +6,9 @@
     handling rounds
     endGame
 
-  helper functions
-    shuffle
-
 game moderator makes sure the game is going alllll according to plan :)
-responsible for things like finalizing player roster, random shuffling, and moving everyone on to the next stage of the game
-
-initialize 1 GameMod instance for every game that starts... (is this okay to have all these objects on serverside?? i thought that its the point of having the database to store organized chunks of info... or are these bits small enough)
+responsible for things like finalizing roster, shuffling, and telling everyone next stage of game
+initialize 1 GameMod instance for every game that starts.
 
 we can set up some backend server routes, which when hit, will invoke the appropriate methods
 so something that works like....
@@ -22,35 +18,32 @@ i.e.
   const game001 = new GameMod(req.params.gameid)
   game001.players = req.body.players
 
-
 idea to implement redux:
 use post requests from clientside react to api/game/:gameid/:actiontype
 with a req.body that is the rest of the action object payload
 put the req.body through a reducer with action.type = actiontype
 
 NOTES:
- - we should probably use redux to handle collisions... is it worth doing that over using just object methods?
- - maybe we should break the timer logic into its own module
- - what info should the players write directly to firebase, and what should be sent directly to server instead?
+ - we should probably use redux on the backend to handle collisions rathe than just use oop
+ - what info should the players write directly to firebase vs be sent directly to server instead?
  - should the firebase updating happen in some different module (a database manager like firechief??)
-
 */
+
+const { shuffle } = require('./utils')
+const PublicTimer = require('./PublicTimer')
 
 class GameMod {
 
   constructor(gameid) {
     this.id = gameid // id, as in firebase database id
+    this.timer = new PublicTimer(gameid) //give the mod a stopwatch that makes public announcments thru fb
     this.players = []
     this.words = []
 
     this.teamA = []
     this.teamB = []
     this.round = 0
-    // this.sprint = 0
     this.sprintDuration = 120 // hardcoded for now
-
-    this.timerId = 0
-    this.timeLeft = 0
 
     // we might want other stuff like
     // this.gameRunning = true/false
@@ -61,7 +54,6 @@ class GameMod {
 
     // firebase.auth().signInWithEmailAndPassword(email, password)
     // .then(() => do something or another or nothing )
-
   }
 
   startGame() {
@@ -74,28 +66,7 @@ class GameMod {
     */
   }
 
-  startTimer(duration) {
-    this.timeLeft = duration
-    this.timer = setInterval(this.tick, 1000)
-  }
-
-  stopTimer() {
-    clearInterval(this.timer)
-    // todo: update firebase's 'isPaused' key
-
-  }
-
-  tick() { //a public tick that's broadcasted to everyone
-    // as long as there's more than 0 seconds left, tick away
-    if (!this.timeLeft) this.endSprint()
-    else this.timeLeft = this.timeLeft--
-    // assuming that database = firebase.database()
-    // this is going to run down the timer every second. all players in this game should be subscribed to changes on this key!
-    database.ref(`sprints/${this.id}/timeRemaining`).set(this.timeLeft)
-  }
-
   startSprint() {
-
     // todo: next person is up ... update firebase with their name in the right spot
 
     // todo: set up a listener for their guesses with a function to check if they're right (??)
@@ -105,12 +76,12 @@ class GameMod {
     // todo: if ALL the words have been guessed, end the sprint and the round immediately
 
     // start the timer with the right amount of time
-    this.startTimer(this.sprintDuration)
+    this.timer.startTimer(this.sprintDuration)
   }
 
   endSprint() {
     // stop the ticking of the clock
-    this.stopTimer()
+    this.timer.stopTimer()
     // todo: quit listening to this person's guesses (or the frontend react could just not allow form submissions anymore)
 
     // it's going to be the next team's turn!
@@ -142,24 +113,6 @@ class GameMod {
 
   }
 
-}
-
-const shuffle = (array) => {
-  var currentIndex = array.length, temporaryValue, randomIndex;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-  return array;
 }
 
 module.exports = GameMod
