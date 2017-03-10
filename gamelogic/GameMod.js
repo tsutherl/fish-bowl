@@ -1,4 +1,6 @@
-/* table of contents
+/* TEMP NOTES
+
+table of contents
   GameMod
     startGame
     timer functions
@@ -18,13 +20,9 @@ i.e.
   const game001 = new GameMod(req.params.gameid)
   game001.players = req.body.players
 
-idea to implement redux:
-use post requests from clientside react to api/game/:gameid/:actiontype
-with a req.body that is the rest of the action object payload
-put the req.body through a reducer with action.type = actiontype
 
-NOTES:
- - we should probably use redux on the backend to handle collisions rathe than just use oop
+QUESTIONS:
+ - should probably use redux on the backend to handle collisions rathe than just use oop?
  - what info should the players write directly to firebase vs be sent directly to server instead?
  - should the firebase updating happen in some different module (a database manager like firechief??)
 */
@@ -39,16 +37,13 @@ class GameMod {
     this.timer = new PublicTimer(gameid) //give the mod a stopwatch that makes public announcments thru fb
     this.players = []
     this.words = []
+    this.gameOver = false
+    this.gameRunning = false
 
     this.teamA = []
     this.teamB = []
     this.round = 0
     this.sprintDuration = 120 // hardcoded for now
-
-    // we might want other stuff like
-    // this.gameRunning = true/false
-    // this.gameOver = true/false
-    // etc
 
     // todo: log into the firebase so this new game mod is authorized to alter db. we can do it anonymously, but its probably better to do credentialed login? depends on how much we want to secure editing permissions
 
