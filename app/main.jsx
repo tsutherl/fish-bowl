@@ -12,14 +12,16 @@ import CodeView from './components/CodeView'
 import JoinGame from './components/JoinGame'
 import WhoAmI from './components/WhoAmI'
 import keys from 'APP/keys.js'
-import firebase from 'firebase'
+import manager from 'APP/utils/manager'
+//import firebase from 'APP/db/firebase'
+//import firebase from 'firebase'
 
-const config = keys.config
+// const config = keys.config
 
-firebase.initializeApp(config)
+// firebase.initializeApp(config)
 
-const database = firebase.database();
-const auth = firebase.auth();
+// const database = firebase.database();
+// const auth = firebase.auth();
 
 
 // const ExampleApp = connect(
@@ -58,7 +60,7 @@ function authUser(){
 render (
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" onEnter={authUser}>
+      <Route path="/" onEnter={manager.authUser}>
         <IndexRoute component={HomeScreen}/>
         <Route path="join" component={JoinGame}></Route>
         <Route path="createGame" component={CreateGameContainer}></Route>

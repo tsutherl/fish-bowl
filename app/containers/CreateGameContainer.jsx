@@ -4,16 +4,19 @@ import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {CreateGame} from '../components/CreateGame'
 import {setGame} from '../reducers/game'
+import manager from 'APP/utils/manager'
+
+const makeGame = manager.createGame
 
 
 export class CreateGameContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      code: '',
-      name: '',
-      rounds: '',
-      duration: ''
+        code: '',
+        name: '',
+        rounds: '',
+        duration: ''
     };
     this.createGame = this.createGame.bind(this)
     this.handleChange = this.handleChange.bind(this);
@@ -26,6 +29,7 @@ export class CreateGameContainer extends Component {
     .then(code => {
       console.log("THIS IS MY GAME CODE: ", code)
       this.setState({code})
+      makeGame(this.state, this.state.code)
       this.props.makeGame(this.state)
       browserHistory.push('/code')
     })
@@ -41,10 +45,9 @@ export class CreateGameContainer extends Component {
       this.setState({duration: evt.target.value})
     }
 
-    if(evt.target.name === 'additionalRounds'){
-      this.setState({additionalRounds: evt.target.value})
+    if(evt.target.name === 'rounds'){
+      this.setState({rounds: evt.target.value})
     }
-
   }
 
 
