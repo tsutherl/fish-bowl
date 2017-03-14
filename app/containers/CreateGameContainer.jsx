@@ -6,7 +6,7 @@ import {CreateGame} from '../components/CreateGame'
 import {setGame} from '../reducers/game'
 import manager from 'APP/utils/manager'
 
-const makeGame = manager.createGame
+const makeGame = manager.registerGame
 
 
 export class CreateGameContainer extends Component {

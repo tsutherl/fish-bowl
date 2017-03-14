@@ -1,15 +1,17 @@
-import firebase from 'firebase'
-import keys from 'APP/keys.js'
+// import firebase from 'firebase'
+// import keys from 'APP/keys.js'
 
-const config = keys.config
+// const config = keys.config
 
-firebase.initializeApp(config)
+// firebase.initializeApp(config)
 
-const database = firebase.database();
-const auth = firebase.auth();
+const firebase = require('./database').firebase
+
+// const database = firebase.database();
+// const auth = firebase.auth();
 
 export default {
-	createGame: (game, code) => (firebase.database().ref('games/' + code).set(game)),
+	registerGame: (game, code) => (firebase.database().ref('games/' + code).set(game)),
 	authUser: () => {
 	  firebase.auth().onAuthStateChanged(function(user) {
 	  if (user) {
