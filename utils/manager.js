@@ -1,3 +1,6 @@
+import store from 'APP/app/store'
+import {authenticated} from 'APP/app/reducers/auth'
+
 // import firebase from 'firebase'
 // import keys from 'APP/keys.js'
 
@@ -17,7 +20,9 @@ export default {
 	  if (user) {
 	    console.log("USER: ", user)
 	    // User is signed in.
+	    store.dispatch(authenticated({id: user.uid, name: ''}))
 	  } else {
+	  	console.log("NO USER YET")
 	    firebase.auth().signInAnonymously().catch(function(error) {
 	      // Handle Errors here.
 	      var errorCode = error.code;

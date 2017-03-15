@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {CreateGame} from '../components/CreateGame'
 import {setGame} from '../reducers/game'
+import {authenticated} from '../reducers/auth'
 import manager from 'APP/utils/manager'
 
 const makeGame = manager.registerGame
@@ -30,8 +31,11 @@ export class CreateGameContainer extends Component {
       console.log("THIS IS MY GAME CODE: ", code)
       this.setState({code})
       makeGame(this.state, this.state.code)
-      this.props.makeGame(this.state)
-      browserHistory.push('/code')
+      this.props.setGame(this.state)
+      let adminUser = Object.assign({}, this.props.user, {isAdmin: true})
+      console.log("ADMIN USER: ", adminUser)
+      this.props.makeAdmin(adminUser)
+      browserHistory.push('/registerPlayer')
     })
 
   }
@@ -63,10 +67,13 @@ export class CreateGameContainer extends Component {
 }
 
 export default connect(
-  (state) => ({}),
+  ({user}) => ({user}),
   (dispatch) => ({
-    makeGame: (game) => {
+    setGame: (game) => {
       dispatch(setGame(game))
+    }, 
+    makeAdmin: (user) => {
+      dispatch(authenticated(user))
     }
   })
 )(CreateGameContainer)
