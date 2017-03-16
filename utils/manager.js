@@ -59,6 +59,10 @@ const utilFunctions = {
 		  }
 		})
 	},
+	addUserToGame: (userId, username, gameCode) => {
+		database.ref('gamePlayers/' + gameCode).child(userId).set(username)
+	},
+
 	updatePlayer: (userId, keyValObj) => {
 		database.ref('players/' + userId).once('value')
 		.then(snapshot => {
@@ -66,6 +70,7 @@ const utilFunctions = {
 			database.ref('players/' + userId).set(updatedPlayer)
 		})
 	},
+
 	makeAdmin: (userId) => {database.ref('players/' + userId).child('isAdmin').set(true)},
 	findGame: (gameCode) => {return database.ref('games/' + gameCode).once('value')}
 }

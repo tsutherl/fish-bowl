@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {connect} from 'react-router';
+import {connect} from 'react-redux';
 import {browserHistory} from 'react-router'
 
 export class Dashboard extends Component{
@@ -9,7 +9,7 @@ export class Dashboard extends Component{
 
     render(){
     	return (
-      		<div className="teamDisplay"> THIS IS THE DASHBOARD </div>
+      		<div className="teamDisplay"> Game: {this.props.game.name} </div>
     	)
     }
 }

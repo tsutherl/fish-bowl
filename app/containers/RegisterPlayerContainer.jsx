@@ -6,7 +6,7 @@ import {RegisterPlayer} from '../components/RegisterPlayer'
 import {authenticated} from '../reducers/auth'
 import manager from 'APP/utils/manager'
 
-const {assignPlayerToGame, updatePlayer} = manager
+const {addPlayerToGame, updatePlayer} = manager
 
 
 export class RegisterPlayerContainer extends Component {
@@ -20,6 +20,7 @@ export class RegisterPlayerContainer extends Component {
   saveUser(evt) {
     evt.preventDefault()
     updatePlayer(this.props.user.id, {name: this.state.name})
+    addPlayerToGame(this.props.user.id, this.state.name, this.props.game.code)
     browserHistory.push('/code')
   }
 
@@ -38,7 +39,7 @@ export class RegisterPlayerContainer extends Component {
 }
 
 export default connect(
-  ({user}) => ({user}),
+  ({user, game}) => ({user, game}),
   (dispatch) => ({
     setUser: (user) => {
       dispatch(authenticated(user))
