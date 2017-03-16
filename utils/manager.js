@@ -1,6 +1,7 @@
 import store from 'APP/app/store'
 import {authenticated} from 'APP/app/reducers/auth'
 import {setGame} from 'APP/app/reducers/game'
+import {setPlayers} from 'APP/app/reducers/players'
 
 const myFirebase = require('./database')
 const firebase = myFirebase.firebase
@@ -20,6 +21,27 @@ const utilFunctions = {
 		database.ref('players/' + userId).on('value', snapshot => {
 			// console.log("USER CHANGED!")
 			store.dispatch(authenticated(snapshot.val()));
+    	});
+	},
+
+	createGameListener: (gameCode) => {
+		database.ref('games/' + gameCode).on('value', snapshot => {
+			// console.log("USER CHANGED!")
+			store.dispatch(setGame(snapshot.val()));
+    	});
+
+		// user on addChild or something instead
+    	database.ref('gamePlayers/' + gameCode).on('value', gamePlayers => {
+			// console.log("USER CHANGED!")
+			gamePlayers = gamePlayers.val()
+			console.log("gamePlayers: ", gamePlayers)
+			let players = [];
+			for(var player in gamePlayers){
+				console.log("player: ", player)
+				players.push(gamePlayers[player])
+			}
+			console.log('players: ', players)
+			store.dispatch(setPlayers(players));
     	});
 	},
 
@@ -59,7 +81,7 @@ const utilFunctions = {
 		  }
 		})
 	},
-	addUserToGame: (userId, username, gameCode) => {
+	addPlayerToGame: (userId, username, gameCode) => {
 		database.ref('gamePlayers/' + gameCode).child(userId).set(username)
 	},
 

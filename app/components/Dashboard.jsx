@@ -9,13 +9,17 @@ export class Dashboard extends Component{
 
     render(){
     	return (
+    		<div>
       		<div className="teamDisplay"> Game: {this.props.game.name} </div>
+      		<div> PLAYERS </div>
+      		{this.props.players.map(player => (<div>{player}</div>))}
+      		</div>
     	)
     }
 }
 
 export default connect(
-	({game, user}) => ({game, user}),
+	({game, user, players}) => ({game, user, players}),
 	(dispatch) => ({})
 )(Dashboard)
 
