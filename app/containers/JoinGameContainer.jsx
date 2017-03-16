@@ -21,7 +21,7 @@ export class JoinGameContainer extends Component {
     findGame(this.state.game)
     .then(game => {
       // better user alert
-      console.log("GAME WHEN JOINING: ", game.val())
+      // console.log("GAME WHEN JOINING: ", game.val())
       if(!game.val()){
         alert('No game associated with this code')
       }

@@ -13,29 +13,8 @@ import CodeView from './components/CodeView'
 import JoinGameContainer from './containers/JoinGameContainer'
 import keys from 'APP/keys.js'
 import manager from 'APP/utils/manager'
-//import firebase from 'APP/db/firebase'
-//import firebase from 'firebase'
 
 const {getUserAndGameInfo} = manager
-// const config = keys.config
-
-// firebase.initializeApp(config)
-
-// const database = firebase.database();
-// const auth = firebase.auth();
-
-
-// const ExampleApp = connect(
-//   ({ auth }) => ({ user: auth })
-// ) (
-//   ({ user, children }) =>
-//     <div>
-//       <nav>
-//         {user ? <WhoAmI/> : <Login/>}
-//       </nav> 
-//       {children}
-//     </div>
-// )
 
 // function authUser(){
 //   firebase.auth().onAuthStateChanged(function(user) {
@@ -75,3 +54,4 @@ render (
   </Provider>,
   document.getElementById('main')
 )
+

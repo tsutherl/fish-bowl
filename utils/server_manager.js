@@ -12,7 +12,7 @@ const firebase = require('./database').firebase
 
 module.exports = {
 	checkCode: (code, func) => {
-		console.log("CODE in checkCode: ", code)
+		// console.log("CODE in checkCode: ", code)
 		// firebase.database().ref('/games/' + code).once('value', function(snapshot){
 		// 	console.log("value: ", snapshot.val())
 		// 	if(snapshot.val() === null) return code

@@ -13,16 +13,9 @@ function findUniqueCode(){
 }
 
 router.get('/code', (req, res, next) => {
-	// crypto.randomBytes(2, (err, buf) => {
-	//   if (err) throw err;
-	//   console.log(`${buf.length} bytes of random data: ${buf.toString('hex')}`);
-	//   const gameCode = buf.toString('hex')
-	//   res.send(buf.toString('hex'))
-	// });
-
 	findUniqueCode()
 	.then(code => {
-		console.log("CODE BEFORE RES.SEND: ", code)
+		// console.log("CODE BEFORE RES.SEND: ", code)
 		res.send(code)
 	})
 })
