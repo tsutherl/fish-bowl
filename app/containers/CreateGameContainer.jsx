@@ -7,7 +7,7 @@ import {setGame} from '../reducers/game'
 import {authenticated} from '../reducers/auth'
 import manager from 'APP/utils/manager'
 
-const {registerGame, makeAdmin, assignPlayerToGame} = manager
+const {registerGame, makeAdmin, updatePlayer} = manager
 
 
 export class CreateGameContainer extends Component {
@@ -35,7 +35,7 @@ export class CreateGameContainer extends Component {
       // add game listener instead of setting game manually
       this.props.setGame(this.state)
       makeAdmin(this.props.user.id)
-      assignPlayerToGame(this.props.user.id, code)
+      updatePlayer(this.props.user.id, {game: code})
       browserHistory.push('/registerPlayer')
     })
 
