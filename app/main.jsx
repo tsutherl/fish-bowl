@@ -8,8 +8,9 @@ import store from './store'
 import HomeScreen from './components/HomeScreen'
 import CreateGameContainer from './containers/CreateGameContainer'
 import RegisterPlayerContainer from './containers/RegisterPlayerContainer'
+import {Dashboard} from './components/Dashboard'
 import CodeView from './components/CodeView'
-import JoinGame from './components/JoinGame'
+import JoinGameContainer from './containers/JoinGameContainer'
 import keys from 'APP/keys.js'
 import manager from 'APP/utils/manager'
 //import firebase from 'APP/db/firebase'
@@ -64,10 +65,11 @@ render (
     <Router history={browserHistory}>
       <Route path="/" onEnter={getUserAndGameInfo}>
         <IndexRoute component={HomeScreen}/>
-        <Route path="join" component={JoinGame}></Route>
+        <Route path="join" component={JoinGameContainer}></Route>
         <Route path="createGame" component={CreateGameContainer}></Route>
         <Route path="code" component={CodeView}></Route>
         <Route path="registerPlayer" component={RegisterPlayerContainer}></Route>
+        <Route path="dashboard" component={Dashboard}></Route>
       </Route>
     </Router>
   </Provider>,

@@ -1,21 +1,10 @@
 import React, { Component } from 'react';
 import {browserHistory} from 'react-router'
 
-export default class Dashboard extends Component {
-  componentDidMount() {
-  
-
-  }
-
-  render() { 
+export const Dashboard = props => {
     return (
-      <form onSubmit={(evt)=>{evt.preventDefault()}}>
-        <input name="username" placeholder="Username"/>
-        <input name="gameCode" placeholder="Game Code"/>
-        <input type="submit" value="Join" />
-      </form>
+      <div> THIS IS THE DASHBOARD </div>
     )
-  }
 }
 
 

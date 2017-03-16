@@ -68,15 +68,15 @@ const utilFunctions = {
 		  }
 		})
 	},
-
-	assignPlayerToGame: (userId, gameCode) => {
-		// do we want the game to hold all player ids also?
-		database.ref('players/' + userId).child('game').set(gameCode)
+	updatePlayer: (userId, keyValObj) => {
+		database.ref('players/' + userId).once('value')
+		.then(snapshot => {
+			let updatedPlayer = Object.assign({}, snapshot.val(), keyValObj)
+			database.ref('players/' + userId).set(updatedPlayer)
+		})
 	},
-	updatePlayer: (userId, key, val) => {
-		database.ref('players/' + userId).child(key).set(val)
-	},
-	makeAdmin: (userId) => {database.ref('players/' + userId).child('isAdmin').set(true)}
+	makeAdmin: (userId) => {database.ref('players/' + userId).child('isAdmin').set(true)},
+	findGame: (gameCode) => {return database.ref('games/' + gameCode).once('value')}
 }
 
 export default utilFunctions

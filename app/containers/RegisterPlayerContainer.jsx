@@ -19,19 +19,15 @@ export class RegisterPlayerContainer extends Component {
 
   saveUser(evt) {
     evt.preventDefault()
-    updatePlayer(this.props.user.id, "name", this.state.name)
+    updatePlayer(this.props.user.id, {name: this.state.name})
     browserHistory.push('/code')
-
-
   }
 
   handleChange(evt) {
     this.setState({name: evt.target.value})
   }
 
-
   render() {
-
     return (
       <RegisterPlayer
         saveUser={this.saveUser}
