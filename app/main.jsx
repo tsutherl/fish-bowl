@@ -15,6 +15,7 @@ import manager from 'APP/utils/manager'
 //import firebase from 'APP/db/firebase'
 //import firebase from 'firebase'
 
+const {getUserAndGameInfo} = manager
 // const config = keys.config
 
 // firebase.initializeApp(config)
@@ -57,10 +58,11 @@ import manager from 'APP/utils/manager'
 // }
 
 
+
 render (
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" onEnter={manager.authUser}>
+      <Route path="/" onEnter={getUserAndGameInfo}>
         <IndexRoute component={HomeScreen}/>
         <Route path="join" component={JoinGame}></Route>
         <Route path="createGame" component={CreateGameContainer}></Route>

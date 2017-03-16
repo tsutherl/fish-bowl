@@ -6,20 +6,20 @@ import {RegisterPlayer} from '../components/RegisterPlayer'
 import {authenticated} from '../reducers/auth'
 import manager from 'APP/utils/manager'
 
-const makeGame = manager.registerGame
+const {assignPlayerToGame, updatePlayer} = manager
 
 
 export class RegisterPlayerContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = this.props.user
+    this.state = {name: ''}
     this.saveUser = this.saveUser.bind(this)
     this.handleChange = this.handleChange.bind(this);
   }
 
   saveUser(evt) {
     evt.preventDefault()
-    this.props.setUser(this.state)
+    updatePlayer(this.props.user.id, "name", this.state.name)
     browserHistory.push('/code')
 
 
@@ -27,7 +27,6 @@ export class RegisterPlayerContainer extends Component {
 
   handleChange(evt) {
     this.setState({name: evt.target.value})
-    console.log("NEW STATE: ", this.state)
   }
 
 

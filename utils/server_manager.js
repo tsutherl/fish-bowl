@@ -19,7 +19,7 @@ module.exports = {
 		// 	else return func()
 		// })
 
-		return firebase.database().ref('/games/' + code).once('value')
+		return firebase.database().ref('games/' + code).once('value')
 		.then(snapshot => {
 			if(snapshot.val() === null) return code
 			else return func()

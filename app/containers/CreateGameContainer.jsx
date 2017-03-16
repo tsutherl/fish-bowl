@@ -7,7 +7,7 @@ import {setGame} from '../reducers/game'
 import {authenticated} from '../reducers/auth'
 import manager from 'APP/utils/manager'
 
-const makeGame = manager.registerGame
+const {registerGame, makeAdmin, assignPlayerToGame} = manager
 
 
 export class CreateGameContainer extends Component {
@@ -30,11 +30,11 @@ export class CreateGameContainer extends Component {
     .then(code => {
       console.log("THIS IS MY GAME CODE: ", code)
       this.setState({code})
-      makeGame(this.state, this.state.code)
+      registerGame(this.state, code)
+      // add game listener instead of setting game manually
       this.props.setGame(this.state)
-      let adminUser = Object.assign({}, this.props.user, {isAdmin: true})
-      console.log("ADMIN USER: ", adminUser)
-      this.props.makeAdmin(adminUser)
+      makeAdmin(this.props.user.id)
+      assignPlayerToGame(this.props.user.id, code)
       browserHistory.push('/registerPlayer')
     })
 
@@ -71,10 +71,7 @@ export default connect(
   (dispatch) => ({
     setGame: (game) => {
       dispatch(setGame(game))
-    }, 
-    makeAdmin: (user) => {
-      dispatch(authenticated(user))
-    }
+    } 
   })
 )(CreateGameContainer)
 
