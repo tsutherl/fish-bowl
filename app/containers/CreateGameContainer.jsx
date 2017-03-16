@@ -17,7 +17,8 @@ export class CreateGameContainer extends Component {
         code: '',
         name: '',
         rounds: '',
-        duration: ''
+        duration: '',
+        status: 'SETUP'
     };
     this.createGame = this.createGame.bind(this)
     this.handleChange = this.handleChange.bind(this);
