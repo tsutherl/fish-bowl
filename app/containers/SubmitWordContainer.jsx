@@ -2,6 +2,10 @@ import axios from 'axios'
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {SubmitWord} from '../components/SubmitWord.jsx'
+import manager from 'APP/utils/manager'
+
+const {submitWord} = manager
+
 
 export class SubmitWordContainer extends Component {
   constructor(props) {
@@ -19,9 +23,7 @@ export class SubmitWordContainer extends Component {
 export default connect(
   ({user}) => ({user}),
   (dispatch) => ({
-    submitWord: (word) => {
-      dispatch(submitWord(word))
-    } 
+    submitWord: submitWord
   })
 )(SubmitWordContainer)
 

@@ -67,8 +67,16 @@ const utilFunctions = {
 		})
 	},
 	makeAdmin: (userId) => {database.ref('players/' + userId).child('isAdmin').set(true)},
-	findGame: (gameCode) => {return database.ref('games/' + gameCode).once('value')}
+	findGame: (gameCode) => {return database.ref('games/' + gameCode).once('value')},
+	submitWord: (word) => {
+		database.ref('users/' + userId).child('wordsSubmitted').set('TODO: some kind of increment function') //if this doesn't send back an error then we can add the word otherwise we need to send an error message back to the user
+		.then(() => database.ref('gameNouns/' + gameId).child('nounId').set('dog2'))
+	},
+
 }
 
 export default utilFunctions
+
+//ref takes object name + key
+//set takes the value you'd like to set to that key
 
