@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import {browserHistory} from 'react-router'
+import SubmitWordContainer from '../containers/SubmitWordContainer.jsx'
 
 export const Dashboard = props => {
     return (
-      <div> THIS IS THE DASHBOARD </div>
+      <div>
+        <div> THIS IS THE DASHBOARD </div>
+        <SubmitWordContainer/>
+      </div>
     )
 }
-
-
 

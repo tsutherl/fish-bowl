@@ -14,7 +14,7 @@ function findUniqueCode(){
 
 router.get('/code', (req, res, next) => {
 	findUniqueCode()
-	.then(code => {
+	.then(code => { 
 		// console.log("CODE BEFORE RES.SEND: ", code)
 		res.send(code)
 	})
