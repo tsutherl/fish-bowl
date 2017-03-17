@@ -7,6 +7,7 @@ const firebase = myFirebase.firebase
 const database = myFirebase.database
 const auth = myFirebase.auth
 
+//TODO: where to add the woreSubmitted key for user?
 const utilFunctions = {
 	registerGame: (game, code) => {
 		(database.ref('games/' + code).set(game))
@@ -68,9 +69,10 @@ const utilFunctions = {
 	},
 	makeAdmin: (userId) => {database.ref('players/' + userId).child('isAdmin').set(true)},
 	findGame: (gameCode) => {return database.ref('games/' + gameCode).once('value')},
-	submitWord: (word) => {
-		database.ref('users/' + userId).child('wordsSubmitted').set('TODO: some kind of increment function') //if this doesn't send back an error then we can add the word otherwise we need to send an error message back to the user
-		.then(() => database.ref('gameNouns/' + gameId).child('nounId').set('dog2'))
+	submitWord: (userId, word) => {
+		database.ref('/players' + userId).child() //get wordsSubmitted key
+		database.ref('players/' + userId).child('wordsSubmitted').set('TODO: some kind of increment function') //if this doesn't send back an error saying 2 words have already been submitted then we can add the word otherwise we need to send an error message back to the user
+		.then(() => database.ref('gameNouns/' + gameId).child('nounId').set('dog2')) //add word to gameNouns object
 	},
 
 }

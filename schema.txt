@@ -1,5 +1,7 @@
 users can only play one game at a time 
 user game info is cleared after they finish a game or decide to start a new game
+
+this object is called players in firebase and it might be nice to rename it users 
 users: {
   id1: {
     nickname: '',
