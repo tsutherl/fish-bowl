@@ -25,6 +25,7 @@ const utilFunctions = {
 	},
 
 	createGameListener: (gameCode) => {
+		console.log("CREATING GAME LISTENER")
 		database.ref('games/' + gameCode).on('value', snapshot => {
 			// console.log("USER CHANGED!")
 			store.dispatch(setGame(snapshot.val()));
@@ -35,19 +36,30 @@ const utilFunctions = {
 			// console.log("USER CHANGED!")
 			gamePlayers = gamePlayers.val()
 			console.log("gamePlayers: ", gamePlayers)
-			let players = utilFunctions.getPlayerNames(gamePlayers)
+			let players = utilFunctions.makePlayersArray(gamePlayers)
 			store.dispatch(setPlayers(players));
     	});
 	},
 
-	getPlayerNames: (playersObj) => {
+	makePlayersArray: (playersObj) => {
 		let players = [];
 
 		for(var player in playersObj){
 			console.log("player: ", player)
-			players.push(playersObj[player])
+			players.push({id: player, name: playersObj[player]})
 		}
 		return players
+	},
+
+	getGameInfo: (gameCode) => {
+		database.ref('games/' + gameCode).once('value')
+		.then(snapshot => store.dispatch(setGame(snapshot.val())))
+
+		database.ref('gamePlayers/' + gameCode).once('value')
+		.then(gamePlayers => {
+		    let players = utilFunctions.makePlayersArray(gamePlayers.val())
+		    store.dispatch(setPlayers(players))
+		})
 	},
 
 	getUserAndGameInfo: () => {
@@ -58,7 +70,8 @@ const utilFunctions = {
 		    //store.dispatch(authenticated({id: user.uid, name: ''}))
 		    // console.log("THIS: ", this)
 		    utilFunctions.createPlayerListener(user.uid)
-		    database.ref('players/' + user.uid).once('value', snapshot => {
+		    database.ref('players/' + user.uid).once('value')
+		    .then(snapshot => {
 		    	let userInfo = snapshot.val()
 		    	// console.log("NEW USER SNAPSHOT", snapshot.val())
 		    	if (!userInfo) {
@@ -70,14 +83,8 @@ const utilFunctions = {
 		    		store.dispatch(authenticated(userInfo))
 		    		if(userInfo.game) {
 		    			// console.log("GAME CODE ON USER: ", userInfo.game)
-		    			database.ref('games/' + userInfo.game).once('value')
-		    			.then(snapshot => store.dispatch(setGame(snapshot.val())))
-
-		    			database.ref('gamePlayers/' + userInfo.game).once('value')
-		    			.then(gamePlayers => {
-		    				let players = utilFunctions.getPlayerNames(gamePlayers.val())
-		    				store.dispatch(setPlayers(players))
-		    			})
+		    			utilFunctions.createGameListener(userInfo.game)
+		    			utilFunctions.getGameInfo(userInfo.game)
 		    		}
 		    	}
 		    })

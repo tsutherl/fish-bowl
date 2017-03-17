@@ -11,8 +11,10 @@ export class Dashboard extends Component{
     	return (
     		<div>
       		<div className="teamDisplay"> Game: {this.props.game.name} </div>
-      		<div> PLAYERS </div>
-      		{this.props.players.map(player => (<div>{player}</div>))}
+      		<div> PLAYERS ({this.props.players.length}) </div>
+      		{this.props.players.map(player => (<div>{player.name}</div>))}
+      		{this.props.user && this.props.user.isAdmin ? <button> MAKE TEAMS </button> : null}
+
       		</div>
     	)
     }
