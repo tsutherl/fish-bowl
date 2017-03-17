@@ -15,7 +15,7 @@ export class SubmitWordContainer extends Component {
 
   render() {
     return (
-      <SubmitWord user={this.props.user.id} submitWord={this.props.submitWord}/>
+      <SubmitWord userId={this.props.user.id} submitWord={this.props.submitWord}/>
     );
   }
 }
