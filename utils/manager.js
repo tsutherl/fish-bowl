@@ -35,14 +35,19 @@ const utilFunctions = {
 			// console.log("USER CHANGED!")
 			gamePlayers = gamePlayers.val()
 			console.log("gamePlayers: ", gamePlayers)
-			let players = [];
-			for(var player in gamePlayers){
-				console.log("player: ", player)
-				players.push(gamePlayers[player])
-			}
-			console.log('players: ', players)
+			let players = utilFunctions.getPlayerNames(gamePlayers)
 			store.dispatch(setPlayers(players));
     	});
+	},
+
+	getPlayerNames: (playersObj) => {
+		let players = [];
+
+		for(var player in playersObj){
+			console.log("player: ", player)
+			players.push(playersObj[player])
+		}
+		return players
 	},
 
 	getUserAndGameInfo: () => {
@@ -67,6 +72,12 @@ const utilFunctions = {
 		    			// console.log("GAME CODE ON USER: ", userInfo.game)
 		    			database.ref('games/' + userInfo.game).once('value')
 		    			.then(snapshot => store.dispatch(setGame(snapshot.val())))
+
+		    			database.ref('gamePlayers/' + userInfo.game).once('value')
+		    			.then(gamePlayers => {
+		    				let players = utilFunctions.getPlayerNames(gamePlayers.val())
+		    				store.dispatch(setPlayers(players))
+		    			})
 		    		}
 		    	}
 		    })
