@@ -12,6 +12,7 @@ function findUniqueCode(){
 	return checkCodeRes
 }
 
+// for the "continue" button after "create game"
 router.get('/code', (req, res, next) => {
 	findUniqueCode()
 	.then(code => {
@@ -20,4 +21,14 @@ router.get('/code', (req, res, next) => {
 	})
 })
 
-module.exports = router 
+
+// for the "start" button after all players join
+router.get('/start/:code', (req, res, next) => {
+  const code = req.params.code
+
+})
+
+
+
+
+module.exports = router
