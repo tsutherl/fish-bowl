@@ -72,10 +72,15 @@ const utilFunctions = {
 	findGame: (gameCode) => {return database.ref('games/' + gameCode).once('value')},
 	submitWord: (userId, word) => {
 		console.log('submitting word')
-		database.ref('/players' + userId).once('value') //get wordsSubmitted key
-		.then(snapshot => console.log('WANNA GET SNAPSHOT', snapshot.val()))
-		// database.ref('players/' + userId).child('wordsSubmitted').set('TODO: some kind of increment function') //if this doesn't send back an error saying 2 words have already been submitted then we can add the word otherwise we need to send an error message back to the user
-		// .then(() => database.ref('gameNouns/' + gameId).child('nounId').set('dog2')) //add word to gameNouns object
+		database.ref('players/' + userId).once('value') //get wordsSubmitted key
+		.then(snapshot => {
+			if (!snapshot.val().wordsSubmitted) { 
+				let incrementedWordCount = Object.assign({}, snapshot.val(), {wordsSubmitted: snapshot.val().wordsSubmitted + 1}) //equivalent to res.data
+				database.ref('players/' + userId).set(incrementedWordCount)
+			// database.ref('players/' + userId).child('wordsSubmitted').set('TODO: some kind of increment function') //if this doesn't send back an error saying 2 words have already been submitted then we can add the word otherwise we need to send an error message back to the user
+			// .then(() => database.ref('gameNouns/' + gameId).child('nounId').set('dog2')) //add word to gameNouns object
+			}
+		})
 	},
 
 }
