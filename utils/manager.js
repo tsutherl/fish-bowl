@@ -63,16 +63,19 @@ const utilFunctions = {
 	updatePlayer: (userId, keyValObj) => {
 		database.ref('players/' + userId).once('value')
 		.then(snapshot => {
-			let updatedPlayer = Object.assign({}, snapshot.val(), keyValObj)
+			let updatedPlayer = Object.assign({}, snapshot.val(), keyValObj) //equivalent to res.data
+			console.log('key value object', keyValObj)
 			database.ref('players/' + userId).set(updatedPlayer)
 		})
 	},
 	makeAdmin: (userId) => {database.ref('players/' + userId).child('isAdmin').set(true)},
 	findGame: (gameCode) => {return database.ref('games/' + gameCode).once('value')},
 	submitWord: (userId, word) => {
-		database.ref('/players' + userId).child() //get wordsSubmitted key
-		database.ref('players/' + userId).child('wordsSubmitted').set('TODO: some kind of increment function') //if this doesn't send back an error saying 2 words have already been submitted then we can add the word otherwise we need to send an error message back to the user
-		.then(() => database.ref('gameNouns/' + gameId).child('nounId').set('dog2')) //add word to gameNouns object
+		console.log('submitting word')
+		database.ref('/players' + userId).once('value') //get wordsSubmitted key
+		.then(snapshot => console.log('WANNA GET SNAPSHOT', snapshot.val()))
+		// database.ref('players/' + userId).child('wordsSubmitted').set('TODO: some kind of increment function') //if this doesn't send back an error saying 2 words have already been submitted then we can add the word otherwise we need to send an error message back to the user
+		// .then(() => database.ref('gameNouns/' + gameId).child('nounId').set('dog2')) //add word to gameNouns object
 	},
 
 }

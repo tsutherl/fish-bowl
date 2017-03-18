@@ -48,6 +48,12 @@ teams: {
 
 }
 
+playerWords: {
+  playerId: {
+
+  }
+}
+
 
 
 games: {
@@ -67,9 +73,9 @@ games: {
   }
 }
 
-for adding word push to gameNouns and also increment wordsSubmitted
+for adding word push to gamePhrases and also increment wordsSubmitted
 
-gameNouns : {
+gamePhrases : {
 
   gameId1: {
     nounId1: {

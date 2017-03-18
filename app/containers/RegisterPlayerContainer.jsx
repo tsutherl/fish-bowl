@@ -12,14 +12,14 @@ const {assignPlayerToGame, updatePlayer} = manager
 export class RegisterPlayerContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {name: ''}
+    this.state = {name: '', wordsSubmitted: 0}
     this.saveUser = this.saveUser.bind(this)
     this.handleChange = this.handleChange.bind(this);
   }
 
   saveUser(evt) {
     evt.preventDefault()
-    updatePlayer(this.props.user.id, {name: this.state.name})
+    updatePlayer(this.props.user.id, this.state)
     browserHistory.push('/code')
   }
 

@@ -14,8 +14,9 @@ export class SubmitWordContainer extends Component {
   }
 
   render() {
+    console.log('THIS DOT PROPS', this.props)
     return (
-      <SubmitWord userId={this.props.user.id} submitWord={this.props.submitWord}/>
+      <SubmitWord user={this.props.user} submitWord={this.props.submitWord}/>
     );
   }
 }
@@ -23,7 +24,7 @@ export class SubmitWordContainer extends Component {
 export default connect(
   ({user}) => ({user}),
   (dispatch) => ({
-    submitWord: (userId, word) => submitWord
+    submitWord: (userId, word) => submitWord(userId, word)
   })
 )(SubmitWordContainer)
 
