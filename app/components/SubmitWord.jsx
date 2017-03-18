@@ -5,7 +5,9 @@ export const SubmitWord = ({user, submitWord}) => {
       <form onSubmit={evt => {
         console.log('we are submitting in submitword component')
         evt.preventDefault()
-        submitWord(user, evt.target.word.value)
+        const submitted = submitWord(user, evt.target.word.value)
+        evt.target.word.value = ''
+        if (!submitted) alert('You have already submitted your one word')
       } }>
         <input name="word" placeholder="Word"/>
         <input type="submit" value="Submit"/>

@@ -59,6 +59,7 @@ const utilFunctions = {
 		  }
 		})
 	},
+	//here we are using Object.assign so we can add whatever keys we want
 	updatePlayer: (userId, keyValObj) => {
 		database.ref('players/' + userId).once('value')
 		.then(snapshot => {
@@ -70,19 +71,17 @@ const utilFunctions = {
 	makeAdmin: (userId) => {database.ref('players/' + userId).child('isAdmin').set(true)},
 	findGame: (gameCode) => {return database.ref('games/' + gameCode).once('value')},
 	submitWord: (user, word) => {
-		console.log('submitting word')
 		database.ref('players/' + user.id).once('value') //get wordsSubmitted key
 		.then(snapshot => {
 			if (!snapshot.val().wordsSubmitted) { //if wordsSubmitted is still zero then let them submit a word - increment counter and add word to gamePhrases
 				let incrementedWordCount = Object.assign({}, snapshot.val(), {wordsSubmitted: snapshot.val().wordsSubmitted + 1}) 
 				database.ref('players/' + user.id).set(incrementedWordCount)
 				.then(() => {
-					console.log('TRYING TO ADD TO GAME NOUNS')
-					let wordInfo = {nounId: {value: word, isGuessed: false}}
-					database.ref('gameNouns/' + user.game).set(wordInfo)
+					let gameNoun = {value: word, isGuessed: false}
+					database.ref('gameNouns/' + user.game).set(gameNoun)
 				})
 			//TODO: this is probably not then best error handling and should be updated  
-			} else return null //else return null so we can let the user know that they've already submitted a word
+			} else return false //else return null so we can let the user know that they've already submitted a word
 		})
 	},
 
