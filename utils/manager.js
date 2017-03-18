@@ -7,7 +7,6 @@ const firebase = myFirebase.firebase
 const database = myFirebase.database
 const auth = myFirebase.auth
 
-//TODO: where to add the woreSubmitted key for user?
 const utilFunctions = {
 	registerGame: (game, code) => {
 		(database.ref('games/' + code).set(game))
@@ -63,23 +62,27 @@ const utilFunctions = {
 	updatePlayer: (userId, keyValObj) => {
 		database.ref('players/' + userId).once('value')
 		.then(snapshot => {
-			let updatedPlayer = Object.assign({}, snapshot.val(), keyValObj) //equivalent to res.data
+			let updatedPlayer = Object.assign({}, snapshot.val(), keyValObj) //snapshot.val() equivalent to res.data
 			console.log('key value object', keyValObj)
 			database.ref('players/' + userId).set(updatedPlayer)
 		})
 	},
 	makeAdmin: (userId) => {database.ref('players/' + userId).child('isAdmin').set(true)},
 	findGame: (gameCode) => {return database.ref('games/' + gameCode).once('value')},
-	submitWord: (userId, word) => {
+	submitWord: (user, word) => {
 		console.log('submitting word')
-		database.ref('players/' + userId).once('value') //get wordsSubmitted key
+		database.ref('players/' + user.id).once('value') //get wordsSubmitted key
 		.then(snapshot => {
-			if (!snapshot.val().wordsSubmitted) { 
-				let incrementedWordCount = Object.assign({}, snapshot.val(), {wordsSubmitted: snapshot.val().wordsSubmitted + 1}) //equivalent to res.data
-				database.ref('players/' + userId).set(incrementedWordCount)
-			// database.ref('players/' + userId).child('wordsSubmitted').set('TODO: some kind of increment function') //if this doesn't send back an error saying 2 words have already been submitted then we can add the word otherwise we need to send an error message back to the user
-			// .then(() => database.ref('gameNouns/' + gameId).child('nounId').set('dog2')) //add word to gameNouns object
-			}
+			if (!snapshot.val().wordsSubmitted) { //if wordsSubmitted is still zero then let them submit a word - increment counter and add word to gamePhrases
+				let incrementedWordCount = Object.assign({}, snapshot.val(), {wordsSubmitted: snapshot.val().wordsSubmitted + 1}) 
+				database.ref('players/' + user.id).set(incrementedWordCount)
+				.then(() => {
+					console.log('TRYING TO ADD TO GAME NOUNS')
+					let wordInfo = {nounId: {value: word, isGuessed: false}}
+					database.ref('gameNouns/' + user.game).set(wordInfo)
+				})
+			//TODO: this is probably not then best error handling and should be updated  
+			} else return null //else return null so we can let the user know that they've already submitted a word
 		})
 	},
 
@@ -87,6 +90,4 @@ const utilFunctions = {
 
 export default utilFunctions
 
-//ref takes object name + key
-//set takes the value you'd like to set to that key
 
