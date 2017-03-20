@@ -25,5 +25,4 @@ module.exports = {
 			else return func()
 		})
 	}
-
 }
