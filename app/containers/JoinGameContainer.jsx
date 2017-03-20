@@ -11,7 +11,7 @@ const {findGame, updatePlayer, addPlayerToGame, createGameListener} = manager
 export class JoinGameContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {game: '', name: '', isAdmin: false}
+    this.state = {game: '', name: '', isAdmin: false, wordsSubmitted: 0}
     this.join = this.join.bind(this)
     this.handleChange = this.handleChange.bind(this);
   }

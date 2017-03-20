@@ -12,17 +12,21 @@ const {addPlayerToGame, updatePlayer, createGameListener} = manager
 export class RegisterPlayerContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {name: ''}
+    this.state = {name: '', wordsSubmitted: 0}
     this.saveUser = this.saveUser.bind(this)
     this.handleChange = this.handleChange.bind(this);
   }
 
   saveUser(evt) {
     evt.preventDefault()
+<<<<<<< HEAD
     updatePlayer(this.props.user.id, {name: this.state.name})
     createGameListener(this.props.game.code)
     addPlayerToGame(this.props.user.id, this.state.name, this.props.game.code)
 
+=======
+    updatePlayer(this.props.user.id, this.state)
+>>>>>>> master
     browserHistory.push('/code')
   }
 

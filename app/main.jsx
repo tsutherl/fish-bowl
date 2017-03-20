@@ -4,7 +4,7 @@ import {Router, Route, IndexRedirect, browserHistory, IndexRoute} from 'react-ro
 import {render} from 'react-dom'
 import {connect, Provider} from 'react-redux'
 
-import store from './store'
+import store from 'APP/app/store'
 import HomeScreen from './components/HomeScreen'
 import CreateGameContainer from './containers/CreateGameContainer'
 import RegisterPlayerContainer from './containers/RegisterPlayerContainer'

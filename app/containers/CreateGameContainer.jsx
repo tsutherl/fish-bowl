@@ -23,7 +23,7 @@ export class CreateGameContainer extends Component {
     this.createGame = this.createGame.bind(this)
     this.handleChange = this.handleChange.bind(this);
   }
-
+  //MAYBE: update FB 
   createGame(evt) {
     evt.preventDefault()
     axios.get('/api/games/code')
