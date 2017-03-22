@@ -99,14 +99,13 @@ const utilFunctions = {
 		  }
 		})
 	},
-<<<<<<< HEAD
+
 	addPlayerToGame: (userId, username, gameCode) => {
 		database.ref('gamePlayers/' + gameCode).child(userId).set(username)
 	},
 
-=======
 	//here we are using Object.assign so we can add whatever keys we want
->>>>>>> master
+
 	updatePlayer: (userId, keyValObj) => {
 		database.ref('players/' + userId).once('value')
 		.then(snapshot => {

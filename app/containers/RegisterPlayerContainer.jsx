@@ -19,14 +19,11 @@ export class RegisterPlayerContainer extends Component {
 
   saveUser(evt) {
     evt.preventDefault()
-<<<<<<< HEAD
-    updatePlayer(this.props.user.id, {name: this.state.name})
+
+    updatePlayer(this.props.user.id, this.state)
     createGameListener(this.props.game.code)
     addPlayerToGame(this.props.user.id, this.state.name, this.props.game.code)
 
-=======
-    updatePlayer(this.props.user.id, this.state)
->>>>>>> master
     browserHistory.push('/code')
   }
 
