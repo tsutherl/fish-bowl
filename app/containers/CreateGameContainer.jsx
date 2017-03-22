@@ -18,7 +18,7 @@ export class CreateGameContainer extends Component {
         name: '',
         rounds: '',
         duration: '',
-        admin: this.props.user.id
+        admin: props.user.id
     };
     this.createGame = this.createGame.bind(this)
     this.handleChange = this.handleChange.bind(this);

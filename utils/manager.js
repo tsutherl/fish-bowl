@@ -15,12 +15,23 @@ const utilFunctions = {
 		const Team2 = {name: 'Team 2', numPlayers: 0, captain: ''}
 
 		// Add teams to Firebase and grab their keys
-		const team1_id = database.ref('gameTeams/' + req.params.code).push(Team1).key
-		const team2_id = database.ref('gameTeams/' + req.params.code).push(Team2).key
+		const team1_id = database.ref('gameTeams/' + code).push(Team1).key
+		const team2_id = database.ref('gameTeams/' + code).push(Team2).key
 
-		// Add game status and team ids to the game information
-		const gameObj = Object.assign({}, game, {status: 'SETUP', team1: team1_id, team2: team2_id})
-		(database.ref('games/' + code).set(game))
+		console.log("team1_id: ", team1_id)
+		console.log("team2_id: ", team2_id)
+
+		Promise.all([team1_id, team2_id])
+		.then(teamIds => {
+			console.log("RES: ", teamIds)
+			// Add game status and team ids to the game information
+			let gameObj = Object.assign({}, game, {team1: teamIds[0], team2: teamIds[1]})
+			console.log("GAME OBJ: ", gameObj)
+			database.ref('games/' + code).set(gameObj)
+		
+		})
+
+		
 	},
 
 	getPlayerGame: (userId) => {
