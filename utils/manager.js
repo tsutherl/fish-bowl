@@ -10,6 +10,16 @@ const auth = myFirebase.auth
 
 const utilFunctions = {
 	registerGame: (game, code) => {
+		// Initializing team information
+		const Team1 = {name: 'Team 1', numPlayers: 0, captain: ''}
+		const Team2 = {name: 'Team 2', numPlayers: 0, captain: ''}
+
+		// Add teams to Firebase and grab their keys
+		const team1_id = database.ref('gameTeams/' + req.params.code).push(Team1).key
+		const team2_id = database.ref('gameTeams/' + req.params.code).push(Team2).key
+
+		// Add game status and team ids to the game information
+		const gameObj = Object.assign({}, game, {status: 'SETUP', team1: team1_id, team2: team2_id})
 		(database.ref('games/' + code).set(game))
 	},
 
@@ -99,14 +109,14 @@ const utilFunctions = {
 		  }
 		})
 	},
-<<<<<<< HEAD
-	addPlayerToGame: (userId, username, gameCode) => {
-		database.ref('gamePlayers/' + gameCode).child(userId).set(username)
-	},
 
-=======
+	// addPlayerToGame: (userId, username, gameCode) => {
+	// 	database.ref('gamePlayers/' + gameCode).child(userId).set(username)
+	// },
+
+
 	//here we are using Object.assign so we can add whatever keys we want
->>>>>>> master
+
 	updatePlayer: (userId, keyValObj) => {
 		database.ref('players/' + userId).once('value')
 		.then(snapshot => {
@@ -126,7 +136,7 @@ const utilFunctions = {
 				database.ref('players/' + user.id).set(incrementedWordCount)
 				.then(() => {
 					let gameNoun = {value: word, isGuessed: false}
-					database.ref('gameNouns/' + user.game).set(gameNoun)
+					database.ref('gameNouns/' + user.game).push(gameNoun)
 				})
 			//TODO: this is probably not then best error handling and should be updated  
 			} else return false //else return null so we can let the user know that they've already submitted a word
