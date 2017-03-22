@@ -5,7 +5,11 @@
 
 // firebase.initializeApp(config)
 
-const firebase = require('./database').firebase
+const myFirebase = require('./database')
+const firebase = myFirebase.firebase
+const database = myFirebase.database
+const gameUtils = require('../gamelogic/utils')
+const shuffle = gameUtils.shuffle
 
 // const database = firebase.database();
 // const auth = firebase.auth();
@@ -24,5 +28,33 @@ module.exports = {
 			if(snapshot.val() === null) return code
 			else return func()
 		})
+	},
+
+	splitPlayersIntoTeams: (players) => {
+		const playersArr = Object.keys(players)
+		console.log("PLAYERS ARRAY: ", playersArr)
+		const shuffledPlayers = shuffle(playersArr)
+		const mid = Math.floor((playersArr.length + 1)/2)
+		const team1Players = shuffledPlayers.slice(0, mid)
+		const team2Players = shuffledPlayers.slice(mid)
+		return {team1Players, team2Players}
+	},
+
+	setTeamsAndCaptains: (playerId, playerNum, code, teamId, string) => {
+		console.log("PLAYER BEFORE SETTING: ", playerId)
+		console.log("PLAYER NUM: ", playerNum)
+		console.log(string)
+		database.ref(`teams/${teamId}/players/${playerNum}`).set(playerId)
+		database.ref(`players/${playerId}/team`).set(teamId)
+		database.ref(`players/${playerId}`).once('value')
+		.then(playerInfo => {
+			// if admin make 
+			if(playerInfo.val().isAdmin){
+
+			}
+		})
 	}
 }
+
+
+

@@ -11,19 +11,23 @@ const auth = myFirebase.auth
 const utilFunctions = {
 	registerGame: (game, code) => {
 		// Initializing team information
-		const Team1 = {name: 'Team 1', numPlayers: 0, captain: ''}
-		const Team2 = {name: 'Team 2', numPlayers: 0, captain: ''}
+		const Team1 = {name: 'Team 1', numPlayers: 0, captain: '', game: code}
+		const Team2 = {name: 'Team 2', numPlayers: 0, captain: '', game: code}
 
 		// Add teams to Firebase and grab their keys
-		const team1_id = database.ref('gameTeams/' + code).push(Team1).key
-		const team2_id = database.ref('gameTeams/' + code).push(Team2).key
+		const team1_id = database.ref('teams/').push(Team1).key
+		const team2_id = database.ref('teams/').push(Team2).key
+
+		// const team1_id = database.ref('gameTeams/' + code).push(Team1).key
+		// const team2_id = database.ref('gameTeams/' + code).push(Team2).key
 
 		console.log("team1_id: ", team1_id)
 		console.log("team2_id: ", team2_id)
 
 		Promise.all([team1_id, team2_id])
-		.then(teamIds => {
+		.then((teamIds) => {
 			console.log("RES: ", teamIds)
+
 			// Add game status and team ids to the game information
 			let gameObj = Object.assign({}, game, {team1: teamIds[0], team2: teamIds[1]})
 			console.log("GAME OBJ: ", gameObj)
@@ -121,9 +125,9 @@ const utilFunctions = {
 		})
 	},
 
-	// addPlayerToGame: (userId, username, gameCode) => {
-	// 	database.ref('gamePlayers/' + gameCode).child(userId).set(username)
-	// },
+	addPlayerToGame: (userId, username, gameCode) => {
+		database.ref('gamePlayers/' + gameCode).child(userId).set(username)
+	},
 
 
 	//here we are using Object.assign so we can add whatever keys we want
