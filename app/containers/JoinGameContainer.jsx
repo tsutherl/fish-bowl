@@ -30,7 +30,7 @@ export class JoinGameContainer extends Component {
         createGameListener(this.state.game)
         addPlayerToGame(this.props.user.id, this.state.name, this.state.game)
         this.props.setGame(game.val())
-        browserHistory.push('/dashboard')
+        browserHistory.push('/prestart')
       }
     })
   }

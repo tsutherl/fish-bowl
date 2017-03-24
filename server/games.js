@@ -8,6 +8,7 @@ const auth = myFirebase.auth
 const router = require('express').Router()
 const crypto = require('crypto')
 const serverManager = require('../utils/server_manager')
+const Promise = require('bluebird')
 const {checkCode, splitPlayersIntoTeams, setTeamsAndCaptains} = serverManager
 
 
@@ -40,25 +41,32 @@ router.get('/make_teams/:code', (req, res, next) => {
 	let gameInfo = database.ref('games/' + code).once('value')
 	let gamePlayers = database.ref('gamePlayers/' + code).once('value')
 
-	Promise.all([gameInfo, gamePlayers])
+	return Promise.all([gameInfo, gamePlayers])
 	.then(resp => {
 		let game = resp[0]
 		let players = resp[1]
 		const {team1, team2} = game.val()
-		console.log("TEAM 1: ", team1)
-		console.log("TEAM 2: ", team2)
 		const {team1Players, team2Players} = splitPlayersIntoTeams(players.val())
-		console.log("team1Players: ", team1Players)
-		console.log("team2Players: ", team2Players)
-	
-		for(let i = 0; i < team1Players.length; i++){
-			setTeamsAndCaptains(team1Players[i], i, code, team1, "team1")
-		}
 
-		for(let i = 0; i < team2Players.length; i++){
-			setTeamsAndCaptains(team2Players[i], i, code, team2, "team2")
-		}
-		res.send('done')
+		let Team1Promise = Promise.map(team1Players, (player, i) => {
+			setTeamsAndCaptains(player, i, code, team1)
+		})
+
+		let Team2Promise = Promise.map(team2Players, (player, i) => {
+			setTeamsAndCaptains(player, i, code, team2)
+		})
+
+		return Promise.all([Team1Promise, Team2Promise])
+		.then(() => res.send('done'))
+
+		// for(let i = 0; i < team1Players.length; i++){
+		// 	setTeamsAndCaptains(team1Players[i], i, code, team1)
+		// }
+
+		// for(let i = 0; i < team2Players.length; i++){
+		// 	setTeamsAndCaptains(team2Players[i], i, code, team2)
+		// }
+		
 	})
 	// database.ref('games/' + code).once('value')
 	// .then(snapshot => {

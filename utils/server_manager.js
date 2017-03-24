@@ -40,12 +40,11 @@ module.exports = {
 		return {team1Players, team2Players}
 	},
 
-	setTeamsAndCaptains: (playerId, playerNum, code, teamId, string) => {
-		console.log("PLAYER BEFORE SETTING: ", playerId)
-		console.log("PLAYER NUM: ", playerNum)
-		console.log(string)
-		database.ref(`teams/${teamId}/players/${playerNum}`).set(playerId)
-		database.ref(`players/${playerId}/team`).set(teamId)
+	setTeamsAndCaptains: (playerId, playerNum, code, teamId) => {
+		// console.log("PLAYER BEFORE SETTING: ", playerId)
+		// console.log("PLAYER NUM: ", playerNum)
+		let gameTeams = database.ref(`gameTeams/${code}/${teamId}/players/${playerNum}`).set(playerId)
+		let player = database.ref(`players/${playerId}/team`).set(teamId)
 		database.ref(`players/${playerId}`).once('value')
 		.then(playerInfo => {
 			// if admin make 

@@ -11,10 +11,12 @@ export class Dashboard extends Component{
     render(){
     	return (
     		<div>
-      		<div className="teamDisplay"> Game: {this.props.game.name} </div>
-      		<div> PLAYERS ({this.props.players.length}) </div>
+        YOU ARE IN THE DASHBOARD
+      		{/*<div className="teamDisplay"> Game: {this.props.game.name} </div>
+      		<div> CODE: {this.props.game.code}</div>
+          <div> PLAYERS ({this.props.players.length}) </div>
       		{this.props.players.map(player => (<div>{player.name}</div>))}
-      		{this.props.user && this.props.user.isAdmin ? <button> MAKE TEAMS </button> : null}
+      		{this.props.user && this.props.user.isAdmin ? <button onClick={makeTeams}> MAKE TEAMS </button> : null}*/}
       	</div>
     	)
     }

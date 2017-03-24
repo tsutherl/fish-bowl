@@ -9,6 +9,7 @@ import HomeScreen from './components/HomeScreen'
 import CreateGameContainer from './containers/CreateGameContainer'
 import RegisterPlayerContainer from './containers/RegisterPlayerContainer'
 import Dashboard from './components/Dashboard'
+import PreStart from './components/PreStart'
 import CodeView from './components/CodeView'
 import JoinGameContainer from './containers/JoinGameContainer'
 import keys from 'APP/keys.js'
@@ -48,6 +49,7 @@ render (
         <Route path="createGame" component={CreateGameContainer}></Route>
         <Route path="code" component={CodeView}></Route>
         <Route path="registerPlayer" component={RegisterPlayerContainer}></Route>
+        <Route path="prestart" component={PreStart}></Route>
         <Route path="dashboard" component={Dashboard}></Route>
       </Route>
     </Router>
