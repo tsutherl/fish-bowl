@@ -32,6 +32,13 @@ module.exports = {
 
 	splitPlayersIntoTeams: (players) => {
 		const playersArr = Object.keys(players)
+		// for(key in players){
+			
+		// 	let player = {}
+		// 	player[key] = players[key]
+		// 	console.log("********** THIS IS A PLAYER *********** ", player)
+		// 	playersArr.push(player)
+		// }
 		console.log("PLAYERS ARRAY: ", playersArr)
 		const shuffledPlayers = shuffle(playersArr)
 		const mid = Math.floor((playersArr.length + 1)/2)

@@ -108,8 +108,9 @@ const utilFunctions = {
 
 		database.ref('gamePlayers/' + gameCode).once('value')
 		.then(gamePlayers => {
-		    let players = utilFunctions.makePlayersArray(gamePlayers.val())
-		    store.dispatch(setPlayers(players))
+		    // let players = utilFunctions.makePlayersArray(gamePlayers.val())
+		    // store.dispatch(setPlayers(players))
+		    store.dispatch(setPlayers(gamePlayers.val()))
 		})
 	},
 

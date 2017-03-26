@@ -23,7 +23,10 @@ export class PreStart extends Component{
       		<div className="teamDisplay"> Game: {this.props.game.name} </div>
       		<div> CODE: {this.props.game.code}</div>
           <div> PLAYERS ({this.props.players.length}) </div>
-      		{this.props.players.map(player => (<div>{player.name}</div>))}
+      		{this.props.players ? Object.keys(this.props.players).map(player => {
+              return <div>{this.props.players[player]}</div>
+            }) : null
+          }
       		{this.props.user && this.props.user.isAdmin ? <button onClick={this.makeTeams}> MAKE TEAMS </button> : null}
       	</div>
     	)
