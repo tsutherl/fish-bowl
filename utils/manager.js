@@ -67,9 +67,9 @@ const utilFunctions = {
 		// gamePlayers listener
     	database.ref(`gamePlayers/${gameCode}`).on('value', gamePlayers => {
 			// can we sort players by time joined?
-			gamePlayers = gamePlayers.val()
-			let players = utilFunctions.makePlayersArray(gamePlayers)
-			store.dispatch(setPlayers(players));
+			//gamePlayers = gamePlayers.val()
+			//let players = utilFunctions.makePlayersArray(gamePlayers)
+			store.dispatch(setPlayers(gamePlayers.val()));
     	});
 
     	// gameTeams listener
