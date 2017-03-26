@@ -9,7 +9,7 @@ export class Dashboard extends Component{
 	}
 
     render(){
-      let team = this.props.teams[this.props.user.team]
+      let team = this.props.user && this.props.teams[this.props.user.team]
     	return (
     		<div>
         YOU ARE IN THE DASHBOARD

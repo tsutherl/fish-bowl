@@ -83,6 +83,7 @@ const utilFunctions = {
 	createGameStatusListener: (gameCode) => {
 		database.ref(`games/${gameCode}/status`).on('value', snapshot => {
 			let status = snapshot.val()
+			console.log("BROWSER HISTORY: ", browserHistory)
 			switch(status){
 				case "DASHBOARD":
 					browserHistory.push('/dashboard')
