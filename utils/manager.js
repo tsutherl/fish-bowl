@@ -154,7 +154,12 @@ const utilFunctions = {
 	},
 
 	addPlayerToGame: (userId, username, gameCode) => {
-		database.ref('gamePlayers/' + gameCode).child(userId).set(username)
+		// database.ref('gamePlayers/' + gameCode).child(userId).set(username)
+		// I think this is creating an error
+		database.ref('gamePlayers/' + gameCode).child(userId).set({
+			timestamp: firebase.database.ServerValue.TIMESTAMP,
+			name: username
+		})			
 	},
 
 
