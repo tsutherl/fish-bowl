@@ -39,7 +39,6 @@ module.exports = {
 		// 	console.log("********** THIS IS A PLAYER *********** ", player)
 		// 	playersArr.push(player)
 		// }
-		console.log("PLAYERS ARRAY: ", playersArr)
 		const shuffledPlayers = shuffle(playersArr)
 		const mid = Math.floor((playersArr.length + 1)/2)
 		const team1Players = shuffledPlayers.slice(0, mid)
@@ -50,15 +49,31 @@ module.exports = {
 	setTeamsAndCaptains: (playerId, playerNum, code, teamId) => {
 		// console.log("PLAYER BEFORE SETTING: ", playerId)
 		// console.log("PLAYER NUM: ", playerNum)
+		
 		let gameTeams = database.ref(`gameTeams/${code}/${teamId}/players/${playerNum}`).set(playerId)
 		let player = database.ref(`players/${playerId}/team`).set(teamId)
-		database.ref(`players/${playerId}`).once('value')
-		.then(playerInfo => {
-			// if admin make 
-			if(playerInfo.val().isAdmin){
+		let promiseArr = [gameTeams, player]
+		console.log("PLAYER NUM: ", playerNum)
+		if(!playerNum){
+			console.log("INSIDE CONDITIONAL")
+			promiseArr.push(database.ref(`gameTeams/${code}/${teamId}/captain`).set(playerId))
+			promiseArr.push(database.ref(`players/${playerId}/isCaptain`).set(true))
+		}
 
-			}
-		})
+		return Promise.all(promiseArr)
+
+
+		
+		// database.ref(`players/${playerId}`).once('value')
+		// .then(playerInfo => {
+		// 	// if admin make 
+
+
+		// 	if(playerInfo.val().isAdmin){
+		// 		database.ref(`gameTeams/${code}/${teamId}/captain`).set(playerId)
+		// 	}
+
+		// })
 	}
 }
 

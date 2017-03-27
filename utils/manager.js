@@ -23,12 +23,8 @@ const utilFunctions = {
 		const team1_id = database.ref('gameTeams/' + code).push(Team1).key
 		const team2_id = database.ref('gameTeams/' + code).push(Team2).key
 
-		console.log("team1_id: ", team1_id)
-		console.log("team2_id: ", team2_id)
-
 		Promise.all([team1_id, team2_id])
 		.then((teamIds) => {
-			console.log("RES: ", teamIds)
 
 			// Add game status and team ids to the game information
 			let gameObj = Object.assign({}, game, {team1: teamIds[0], team2: teamIds[1], status: 
@@ -47,12 +43,9 @@ const utilFunctions = {
 
 	createPlayerListener: (userId) => {
 		database.ref(`players/${userId}`).on('value', snapshot => {
-			// console.log("USER CHANGED!")
 			store.dispatch(authenticated(snapshot.val()));
     	});
 
-		// have a change in team push you to the dashboard
-    	// database.ref(`players/${userId}/team`)
 	},
 
 	// When game, gamePlayers, or gameTeams changes, updates will be dispatched to store
@@ -66,13 +59,11 @@ const utilFunctions = {
 
 		// gamePlayers listener
     	database.ref(`gamePlayers/${gameCode}`).orderByChild('timestamp').on('value', gamePlayers => {
-			// DONE: sorting players by timed joined 
-			//gamePlayers = gamePlayers.val()
-			//let players = utilFunctions.makePlayersArray(gamePlayers)
-			const orderedPlayers = [];
-			gamePlayers.forEach((playerInfo) => orderedPlayers.push(playerInfo.val().name));
-			
-			store.dispatch(setPlayers(orderedPlayers));
+
+			const orderedPlayers = {};
+			gamePlayers.forEach((player) => {
+				orderedPlayers[player.key] = player.val()
+			});
     	});
 
     	// gameTeams listener
@@ -107,38 +98,32 @@ const utilFunctions = {
 	},
 
 	getGameInfo: (gameCode) => {
+		console.log("GET GAME INFO!")
 		database.ref('games/' + gameCode).once('value')
 		.then(snapshot => store.dispatch(setGame(snapshot.val())))
 
-		database.ref('gamePlayers/' + gameCode).once('value')
+		database.ref('gamePlayers/' + gameCode).orderByChild('timestamp').once('value')
 		.then(gamePlayers => {
-		    // let players = utilFunctions.makePlayersArray(gamePlayers.val())
-		    // store.dispatch(setPlayers(players))
-		    store.dispatch(setPlayers(gamePlayers.val()))
-		})
+			const orderedPlayers = {};
+			gamePlayers.forEach((player) => {
+				orderedPlayers[player.key] = player.val()
+			});
+			store.dispatch(setPlayers(orderedPlayers))
 	},
 
 	getUserAndGameInfo: () => {
 	  auth.onAuthStateChanged(function(user) {
 		  if (user) {
-		    // console.log("USER: ", user)
-		    // User is signed in.
-		    //store.dispatch(authenticated({id: user.uid, name: ''}))
-		    // console.log("THIS: ", this)
 		    utilFunctions.createPlayerListener(user.uid)
 		    database.ref('players/' + user.uid).once('value')
 		    .then(snapshot => {
 		    	let userInfo = snapshot.val()
-		    	// console.log("NEW USER SNAPSHOT", snapshot.val())
 		    	if (!userInfo) {
-		    		// console.log("USER NOT IN DATABASE")
 		    		database.ref('players/' + user.uid).set({id: user.uid})
 		    	}
 		    	else {
-		    		// console.log("USER IN DB")
 		    		store.dispatch(authenticated(userInfo))
 		    		if(userInfo.game) {
-		    			// console.log("GAME CODE ON USER: ", userInfo.game)
 		    			utilFunctions.createGameListener(userInfo.game)
 		    			utilFunctions.getGameInfo(userInfo.game)
 		    		}
