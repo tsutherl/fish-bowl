@@ -18,7 +18,7 @@ export class Dashboard extends Component{
           return (<div key={player}> {this.props.players[player].name} </div>)
         }) : null}
          
-       
+        {this.props.user && this.props.user.isAdmin}
         
       		{/*<div className="teamDisplay"> Game: {this.props.game.name} </div>
       		<div> CODE: {this.props.game.code}</div>

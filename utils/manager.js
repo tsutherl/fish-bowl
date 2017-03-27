@@ -109,6 +109,7 @@ const utilFunctions = {
 				orderedPlayers[player.key] = player.val()
 			});
 			store.dispatch(setPlayers(orderedPlayers))
+		})
 	},
 
 	getUserAndGameInfo: () => {
