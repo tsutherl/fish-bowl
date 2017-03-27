@@ -14,13 +14,8 @@ export class Dashboard extends Component{
     		<div>
         YOU ARE IN THE DASHBOARD
         {team ? <div> MY TEAM: {team.name}</div> : null}
-        {console.log("TEAM: ", team)}
-        {console.log("PLAYERS ON MY TEAM: ", team && team['players'])}
-        {console.log("PLAYERS IN GAME: ", this.props.players)}
         {team && team.players ? team.players.map(player => {
-          console.log("PLAYER: ", player)
-          console.log("TEAMMATE NAME: ", this.props.players[player])
-          return (<div key={player}> {this.props.players[player]} </div>)
+          return (<div key={player}> {this.props.players[player].name} </div>)
         }) : null}
          
        

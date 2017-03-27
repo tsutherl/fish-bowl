@@ -23,12 +23,8 @@ const utilFunctions = {
 		const team1_id = database.ref('gameTeams/' + code).push(Team1).key
 		const team2_id = database.ref('gameTeams/' + code).push(Team2).key
 
-		console.log("team1_id: ", team1_id)
-		console.log("team2_id: ", team2_id)
-
 		Promise.all([team1_id, team2_id])
 		.then((teamIds) => {
-			console.log("RES: ", teamIds)
 
 			// Add game status and team ids to the game information
 			let gameObj = Object.assign({}, game, {team1: teamIds[0], team2: teamIds[1], status: 
@@ -69,10 +65,14 @@ const utilFunctions = {
 			// DONE: sorting players by timed joined 
 			//gamePlayers = gamePlayers.val()
 			//let players = utilFunctions.makePlayersArray(gamePlayers)
-			const orderedPlayers = [];
-			gamePlayers.forEach((playerInfo) => orderedPlayers.push(playerInfo.val().name));
-			
-			store.dispatch(setPlayers(orderedPlayers));
+			// const orderedPlayers = [];
+			// gamePlayers.forEach((playerInfo) => orderedPlayers.push(playerInfo.val()));
+			// store.dispatch(setPlayers(orderedPlayers));
+
+			const orderedPlayers = {};
+			gamePlayers.forEach((player) => {
+				orderedPlayers[player.key] = player.val()
+			});
     	});
 
     	// gameTeams listener
@@ -107,14 +107,25 @@ const utilFunctions = {
 	},
 
 	getGameInfo: (gameCode) => {
+		console.log("GET GAME INFO!")
 		database.ref('games/' + gameCode).once('value')
 		.then(snapshot => store.dispatch(setGame(snapshot.val())))
 
-		database.ref('gamePlayers/' + gameCode).once('value')
+		database.ref('gamePlayers/' + gameCode).orderByChild('timestamp').once('value')
 		.then(gamePlayers => {
-		    // let players = utilFunctions.makePlayersArray(gamePlayers.val())
-		    // store.dispatch(setPlayers(players))
-		    store.dispatch(setPlayers(gamePlayers.val()))
+			// console.log("GAME PLAYERS: ", gamePlayers.val())
+			// const orderedPlayers = [];
+			const orderedPlayers = {};
+			gamePlayers.forEach((player) => {
+				// console.log("TYPE OF PLAYERINFO: ", typeof player.val())
+				// console.log("PLAYER INFO: ", player.val())
+				// orderedPlayers.push(player.val())
+				orderedPlayers[player.key] = player.val()
+			});
+			store.dispatch(setPlayers(orderedPlayers))
+			// console.log("ORDERED PLAYERS: ", orderedPlayers)
+			// Promise.all(orderedPlayers)
+			// .then(() => store.dispatch(setPlayers(orderedPlayers)))
 		})
 	},
 
