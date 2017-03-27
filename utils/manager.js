@@ -114,24 +114,16 @@ const utilFunctions = {
 	getUserAndGameInfo: () => {
 	  auth.onAuthStateChanged(function(user) {
 		  if (user) {
-		    // console.log("USER: ", user)
-		    // User is signed in.
-		    //store.dispatch(authenticated({id: user.uid, name: ''}))
-		    // console.log("THIS: ", this)
 		    utilFunctions.createPlayerListener(user.uid)
 		    database.ref('players/' + user.uid).once('value')
 		    .then(snapshot => {
 		    	let userInfo = snapshot.val()
-		    	// console.log("NEW USER SNAPSHOT", snapshot.val())
 		    	if (!userInfo) {
-		    		// console.log("USER NOT IN DATABASE")
 		    		database.ref('players/' + user.uid).set({id: user.uid})
 		    	}
 		    	else {
-		    		// console.log("USER IN DB")
 		    		store.dispatch(authenticated(userInfo))
 		    		if(userInfo.game) {
-		    			// console.log("GAME CODE ON USER: ", userInfo.game)
 		    			utilFunctions.createGameListener(userInfo.game)
 		    			utilFunctions.getGameInfo(userInfo.game)
 		    		}
