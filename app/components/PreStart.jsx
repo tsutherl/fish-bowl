@@ -20,8 +20,6 @@ export class PreStart extends Component{
     render(){
     	return (
     		<div>
-          {console.log("TYPEOF this.props.players: ", typeof this.props.players )}
-          {console.log("TYPEOF Object.keys(this.props.players) ", typeof Object.keys(this.props.players))}
       		<div className="teamDisplay"> Game: {this.props.game.name} </div>
       		<div> CODE: {this.props.game.code}</div>
           <div> PLAYERS ({Object.keys(this.props.players).length}) </div>
