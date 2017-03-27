@@ -13,7 +13,7 @@ export class Dashboard extends Component{
     	return (
     		<div>
         YOU ARE IN THE DASHBOARD
-        {team ? <div> MY TEAM: {this.props.user.team}</div> : null}
+        {team ? <div> MY TEAM: {team.name}</div> : null}
         {console.log("TEAM: ", team)}
         {console.log("PLAYERS ON MY TEAM: ", team && team['players'])}
         {console.log("PLAYERS IN GAME: ", this.props.players)}
