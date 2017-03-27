@@ -6,7 +6,7 @@ import {JoinGame} from '../components/JoinGame'
 import {setGame} from '../reducers/game'
 import manager from 'APP/utils/manager'
 
-const {findGame, updatePlayer} = manager
+const {findGame, updatePlayer, addPlayerToGame, createGameListener} = manager
 
 export class JoinGameContainer extends Component {
   constructor(props) {
@@ -27,8 +27,10 @@ export class JoinGameContainer extends Component {
       }
       else{
         updatePlayer(this.props.user.id, this.state)
+        createGameListener(this.state.game)
+        addPlayerToGame(this.props.user.id, this.state.name, this.state.game)
         this.props.setGame(game.val())
-        browserHistory.push('/dashboard')
+        browserHistory.push('/prestart')
       }
     })
   }
