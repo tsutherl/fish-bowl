@@ -43,12 +43,9 @@ const utilFunctions = {
 
 	createPlayerListener: (userId) => {
 		database.ref(`players/${userId}`).on('value', snapshot => {
-			// console.log("USER CHANGED!")
 			store.dispatch(authenticated(snapshot.val()));
     	});
 
-		// have a change in team push you to the dashboard
-    	// database.ref(`players/${userId}/team`)
 	},
 
 	// When game, gamePlayers, or gameTeams changes, updates will be dispatched to store
@@ -62,12 +59,6 @@ const utilFunctions = {
 
 		// gamePlayers listener
     	database.ref(`gamePlayers/${gameCode}`).orderByChild('timestamp').on('value', gamePlayers => {
-			// DONE: sorting players by timed joined 
-			//gamePlayers = gamePlayers.val()
-			//let players = utilFunctions.makePlayersArray(gamePlayers)
-			// const orderedPlayers = [];
-			// gamePlayers.forEach((playerInfo) => orderedPlayers.push(playerInfo.val()));
-			// store.dispatch(setPlayers(orderedPlayers));
 
 			const orderedPlayers = {};
 			gamePlayers.forEach((player) => {
@@ -113,20 +104,11 @@ const utilFunctions = {
 
 		database.ref('gamePlayers/' + gameCode).orderByChild('timestamp').once('value')
 		.then(gamePlayers => {
-			// console.log("GAME PLAYERS: ", gamePlayers.val())
-			// const orderedPlayers = [];
 			const orderedPlayers = {};
 			gamePlayers.forEach((player) => {
-				// console.log("TYPE OF PLAYERINFO: ", typeof player.val())
-				// console.log("PLAYER INFO: ", player.val())
-				// orderedPlayers.push(player.val())
 				orderedPlayers[player.key] = player.val()
 			});
 			store.dispatch(setPlayers(orderedPlayers))
-			// console.log("ORDERED PLAYERS: ", orderedPlayers)
-			// Promise.all(orderedPlayers)
-			// .then(() => store.dispatch(setPlayers(orderedPlayers)))
-		})
 	},
 
 	getUserAndGameInfo: () => {
