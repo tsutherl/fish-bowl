@@ -65,11 +65,14 @@ const utilFunctions = {
 
 
 		// gamePlayers listener
-    	database.ref(`gamePlayers/${gameCode}`).on('value', gamePlayers => {
-			// can we sort players by time joined?
+    	database.ref(`gamePlayers/${gameCode}`).orderByChild('timestamp').on('value', gamePlayers => {
+			// DONE: sorting players by timed joined 
 			//gamePlayers = gamePlayers.val()
 			//let players = utilFunctions.makePlayersArray(gamePlayers)
-			store.dispatch(setPlayers(gamePlayers.val()));
+			const orderedPlayers = [];
+			gamePlayers.forEach((playerInfo) => orderedPlayers.push(playerInfo.val().name));
+			
+			store.dispatch(setPlayers(orderedPlayers));
     	});
 
     	// gameTeams listener
@@ -154,7 +157,12 @@ const utilFunctions = {
 	},
 
 	addPlayerToGame: (userId, username, gameCode) => {
-		database.ref('gamePlayers/' + gameCode).child(userId).set(username)
+		// database.ref('gamePlayers/' + gameCode).child(userId).set(username)
+		// I think this is creating an error
+		database.ref('gamePlayers/' + gameCode).child(userId).set({
+			timestamp: firebase.database.ServerValue.TIMESTAMP,
+			name: username
+		})			
 	},
 
 
