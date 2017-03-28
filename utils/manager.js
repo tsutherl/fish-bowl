@@ -191,7 +191,8 @@ const utilFunctions = {
 	},
 	deleteGame: (gameId, userId) => {
 		database.ref('games/' + gameId).remove()
-		.then(() => database.ref('players/' + userId).remove())
+		.then(() => {
+			database.ref('players/' + userId).remove()})
 		.then(() => browserHistory.push('/'))
 	}
 }
@@ -199,3 +200,4 @@ const utilFunctions = {
 export default utilFunctions
 
 
+//TODO: numPlayers needs to increment when player is added or is it not counting the admin or is it not needed at all?

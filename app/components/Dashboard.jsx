@@ -21,7 +21,6 @@ export class Dashboard extends Component{
         {team && team.players ? team.players.map(player => {
           return (<div key={player}> {this.props.players[player].name} </div>)
         }) : null}
-         
         {this.props.user && this.props.user.isAdmin? <button onClick={() => this.props.endGame(this.props.game.code, this.props.user.id)}> END GAME </button> : <button onClick={this.props.leaveGame}> LEAVE GAME </button>}
         
       		{/*<div className="teamDisplay"> Game: {this.props.game.name} </div>
@@ -37,8 +36,8 @@ export class Dashboard extends Component{
 export default connect(
 	({game, user, players, teams}) => ({game, user, players, teams}),
 	(dispatch) => ({
-		endGame: (gameId) => {
-			deleteGame(gameId)
+		endGame: (gameId, userId) => {
+			deleteGame(gameId, userId)
 		}
 	})
 )(Dashboard)
