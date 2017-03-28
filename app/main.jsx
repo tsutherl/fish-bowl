@@ -11,6 +11,7 @@ import RegisterPlayerContainer from './containers/RegisterPlayerContainer'
 import Dashboard from './components/Dashboard'
 import PreStart from './components/PreStart'
 import CodeView from './components/CodeView'
+import TeamAlert from './components/TeamAlert'
 import JoinGameContainer from './containers/JoinGameContainer'
 import keys from 'APP/keys.js'
 import manager from 'APP/utils/manager'
@@ -50,6 +51,7 @@ render (
         <Route path="code" component={CodeView}></Route>
         <Route path="registerPlayer" component={RegisterPlayerContainer}></Route>
         <Route path="prestart" component={PreStart}></Route>
+        <Route path="teamalert" component={TeamAlert}></Route>
         <Route path="dashboard" component={Dashboard}></Route>
       </Route>
     </Router>

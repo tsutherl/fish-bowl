@@ -14,7 +14,7 @@ export class PreStart extends Component{
   makeTeams(){
     const {game} = this.props
     axios.get(`/api/games/make_teams/${game.code}`)
-    .then(() => database.ref(`games/${game.code}/status`).set('DASHBOARD'))
+    // .then(() => database.ref(`games/${game.code}/status`).set('DASHBOARD'))
   }
 
     render(){

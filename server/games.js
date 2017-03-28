@@ -5,6 +5,7 @@ const myFirebase = require('APP/utils/database')
 const firebase = myFirebase.firebase
 const database = myFirebase.database
 const auth = myFirebase.auth
+const browserHistory = require('react-router').browserHistory
 const router = require('express').Router()
 const crypto = require('crypto')
 const serverManager = require('../utils/server_manager')
@@ -57,6 +58,18 @@ router.get('/make_teams/:code', (req, res, next) => {
 		})
 
 		return Promise.all([Team1Promise, Team2Promise])
+		// .then(() => {
+		// 	console.log("about to push to dashboard")
+		// 	return database.ref(`games/${code}/status`).set('DASHBOARD')
+		// })
+		.then(() => {
+			console.log("about to push to team assigned")
+			return database.ref(`games/${code}/status`).set('TEAM_ASSIGNED')
+		})
+		.then(() => {
+			console.log("about to set dashboard")
+			setTimeout(() => database.ref(`games/${code}/status`).set('DASHBOARD'), 7000)
+		})
 		.then(() => res.send('done'))
 
 		// for(let i = 0; i < team1Players.length; i++){

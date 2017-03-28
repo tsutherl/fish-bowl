@@ -42,6 +42,7 @@ const utilFunctions = {
 	},
 
 	createPlayerListener: (userId) => {
+		console.log("CREATE PLAYER LISTENER")
 		database.ref(`players/${userId}`).on('value', snapshot => {
 			store.dispatch(authenticated(snapshot.val()));
     	});
@@ -50,7 +51,7 @@ const utilFunctions = {
 
 	// When game, gamePlayers, or gameTeams changes, updates will be dispatched to store
 	createGameListener: (gameCode) => {
-
+		console.log("CREATE GAME LISTENER")
 		// game listener
 		database.ref(`games/${gameCode}`).on('value', snapshot => {
 			store.dispatch(setGame(snapshot.val()));
@@ -59,11 +60,12 @@ const utilFunctions = {
 
 		// gamePlayers listener
     	database.ref(`gamePlayers/${gameCode}`).orderByChild('timestamp').on('value', gamePlayers => {
-
+    		console.log("GAME PLAYERS CHANGED!")
 			const orderedPlayers = {};
 			gamePlayers.forEach((player) => {
 				orderedPlayers[player.key] = player.val()
 			});
+			store.dispatch(setPlayers(orderedPlayers))
     	});
 
     	// gameTeams listener
@@ -79,6 +81,12 @@ const utilFunctions = {
 			let status = snapshot.val()
 			console.log("BROWSER HISTORY: ", browserHistory)
 			switch(status){
+				case "PLAYERS_JOINING":
+					browserHistory.push('/prestart')
+					break;
+				case "TEAM_ASSIGNED":
+					browserHistory.push('/teamalert')
+					break;
 				case "DASHBOARD":
 					browserHistory.push('/dashboard')
 					break;
@@ -99,8 +107,12 @@ const utilFunctions = {
 
 	getGameInfo: (gameCode) => {
 		console.log("GET GAME INFO!")
+		console.log("GAME CODE: ", gameCode)
 		database.ref('games/' + gameCode).once('value')
-		.then(snapshot => store.dispatch(setGame(snapshot.val())))
+		.then(snapshot => {
+			console.log("GAME SNAPSHOT: ", snapshot.val())
+			store.dispatch(setGame(snapshot.val()))
+		})
 
 		database.ref('gamePlayers/' + gameCode).orderByChild('timestamp').once('value')
 		.then(gamePlayers => {
@@ -109,11 +121,13 @@ const utilFunctions = {
 				orderedPlayers[player.key] = player.val()
 			});
 			store.dispatch(setPlayers(orderedPlayers))
+		})
 	},
 
 	getUserAndGameInfo: () => {
 	  auth.onAuthStateChanged(function(user) {
 		  if (user) {
+		  	console.log("FOUND USER")
 		    utilFunctions.createPlayerListener(user.uid)
 		    database.ref('players/' + user.uid).once('value')
 		    .then(snapshot => {
