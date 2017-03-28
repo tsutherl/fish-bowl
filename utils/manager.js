@@ -190,9 +190,10 @@ const utilFunctions = {
 		browserHistory.push('/')
 	},
 	deleteGame: (gameId, userId) => {
+		console.log('DELETING GAME')
 		database.ref('games/' + gameId).remove()
 		.then(() => {
-			database.ref('players/' + userId).remove()})
+			database.ref('players/' + userId).set({id: userId})})
 		.then(() => browserHistory.push('/'))
 	}
 }
