@@ -42,7 +42,7 @@ const utilFunctions = {
 	},
 
 	createPlayerListener: (userId) => {
-		console.log("CREATE PLAYER LISTENER")
+
 		database.ref(`players/${userId}`).on('value', snapshot => {
 			store.dispatch(authenticated(snapshot.val()));
     	});
@@ -51,7 +51,6 @@ const utilFunctions = {
 
 	// When game, gamePlayers, or gameTeams changes, updates will be dispatched to store
 	createGameListener: (gameCode) => {
-		console.log("CREATE GAME LISTENER")
 		// game listener
 		database.ref(`games/${gameCode}`).on('value', snapshot => {
 			store.dispatch(setGame(snapshot.val()));
@@ -60,7 +59,6 @@ const utilFunctions = {
 
 		// gamePlayers listener
     	database.ref(`gamePlayers/${gameCode}`).orderByChild('timestamp').on('value', gamePlayers => {
-    		console.log("GAME PLAYERS CHANGED!")
 			const orderedPlayers = {};
 			gamePlayers.forEach((player) => {
 				orderedPlayers[player.key] = player.val()
@@ -79,7 +77,6 @@ const utilFunctions = {
 	createGameStatusListener: (gameCode) => {
 		database.ref(`games/${gameCode}/status`).on('value', snapshot => {
 			let status = snapshot.val()
-			console.log("BROWSER HISTORY: ", browserHistory)
 			switch(status){
 				case "PLAYERS_JOINING":
 					browserHistory.push('/prestart')
@@ -106,11 +103,9 @@ const utilFunctions = {
 	},
 
 	getGameInfo: (gameCode) => {
-		console.log("GET GAME INFO!")
-		console.log("GAME CODE: ", gameCode)
+
 		database.ref('games/' + gameCode).once('value')
 		.then(snapshot => {
-			console.log("GAME SNAPSHOT: ", snapshot.val())
 			store.dispatch(setGame(snapshot.val()))
 		})
 
@@ -127,7 +122,6 @@ const utilFunctions = {
 	getUserAndGameInfo: () => {
 	  auth.onAuthStateChanged(function(user) {
 		  if (user) {
-		  	console.log("FOUND USER")
 		    utilFunctions.createPlayerListener(user.uid)
 		    database.ref('players/' + user.uid).once('value')
 		    .then(snapshot => {
@@ -145,7 +139,6 @@ const utilFunctions = {
 		    })
 		  }
 		  else {
-		  	// console.log("NO USER YET")
 		    auth.signInAnonymously().catch(function(error) {
 		      // Handle Errors here.
 		      var errorCode = error.code;
@@ -156,8 +149,7 @@ const utilFunctions = {
 	},
 
 	addPlayerToGame: (userId, username, gameCode) => {
-		// database.ref('gamePlayers/' + gameCode).child(userId).set(username)
-		// I think this is creating an error
+
 		database.ref('gamePlayers/' + gameCode).child(userId).set({
 			timestamp: firebase.database.ServerValue.TIMESTAMP,
 			name: username
