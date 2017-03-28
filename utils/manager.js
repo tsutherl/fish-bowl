@@ -37,6 +37,10 @@ const utilFunctions = {
 		
 	},
 
+	iterateThroughPlayers: () => {
+
+	},
+
 	getPlayerGame: (userId) => {
 		return database.ref('players/' + userId).child('game').once('value')
 	},
@@ -179,6 +183,17 @@ const utilFunctions = {
 			} else return false //else return null so we can let the user know that they've already submitted a word
 		})
 	},
+	//TODO: is it ok to use browserHistory.push in this file?
+	leaveGame: (userId) => {
+		console.log('leaving game')
+		database.ref('gamePlayers/' + userId).remove()
+		browserHistory.push('/')
+	},
+	endGame: (gameId) => {
+		console.log('ending game')
+		database.ref('games/' + gameId).remove()
+		browserHistory.push('/')
+	}
 
 }
 

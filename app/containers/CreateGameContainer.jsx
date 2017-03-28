@@ -23,13 +23,14 @@ export class CreateGameContainer extends Component {
     this.createGame = this.createGame.bind(this)
     this.handleChange = this.handleChange.bind(this);
   }
+  
   //MAYBE: update FB 
   createGame(evt) {
     evt.preventDefault()
     axios.get('/api/games/code')
     .then(res => res.data)
     .then(code => {
-      // console.log("THIS IS MY GAME CODE: ", code)
+      console.log("THIS IS MY GAME CODE: ", code)
       this.setState({code})
       registerGame(this.state, code)
       // add game listener instead of setting game manually
