@@ -18,7 +18,7 @@ export class CreateGameContainer extends Component {
         name: '',
         rounds: '',
         duration: '',
-        admin: props.user.id
+        admin: props.user.id | ''
     };
     this.createGame = this.createGame.bind(this)
     this.handleChange = this.handleChange.bind(this);
@@ -72,6 +72,7 @@ export default connect(
   ({user}) => ({user}),
   (dispatch) => ({
     setGame: (game) => {
+      console.log('setting the game oh ya')
       dispatch(setGame(game))
     } 
   })

@@ -3,6 +3,8 @@ import axios from 'axios'
 const reducer = (state=null, action) => {
   switch(action.type) {
   case AUTHENTICATED:
+    console.log('auth:::', action.user)
+
     return action.user
   }
   return state
