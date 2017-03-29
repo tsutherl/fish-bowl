@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router'
+import manager from 'APP/utils/manager'
 
+const {leaveGame, deleteGame} = manager
 
+//TODO: why does it take so long for it to check that I'm an admin
+//TODO: bug - shows old nickname entered!!! => seems not to be updating the state after updating the nickname
 export class Dashboard extends Component{
 	constructor(props){
 		super(props)
@@ -42,8 +46,6 @@ export class Dashboard extends Component{
         return (<div key={player}> {this.props.players[player].name} </div>)
       }) : null}
          
-       
-        
       {/*<div className="teamDisplay"> Game: {this.props.game.name} </div>
       		<div> CODE: {this.props.game.code}</div>
           <div> PLAYERS ({this.props.players.length}) </div>
@@ -63,7 +65,11 @@ export const EditTeamName = props => (
 
 export default connect(
 	({game, user, players, teams}) => ({game, user, players, teams}),
-	(dispatch) => ({})
+	(dispatch) => ({
+		endGame: (gameId, userId) => {
+			deleteGame(gameId, userId)
+		}
+	})
 )(Dashboard)
 
 

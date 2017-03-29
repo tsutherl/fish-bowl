@@ -41,6 +41,7 @@ const {getUserAndGameInfo} = manager
 
 
 
+
 render (
   <Provider store={store}>
     <Router history={browserHistory}>
