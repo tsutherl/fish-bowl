@@ -10,6 +10,8 @@ const firebase = myFirebase.firebase
 const database = myFirebase.database
 const auth = myFirebase.auth
 
+//TODO: i think it would be really helpful to have our fb names line up with our store state name ex. store state has user but fb has players - just a thought - or maybe we should just add comments for stuff like that
+
 const utilFunctions = {
 	registerGame: (game, code) => {
 		// Initializing team information
@@ -29,12 +31,15 @@ const utilFunctions = {
 			// Add game status and team ids to the game information
 			let gameObj = Object.assign({}, game, {team1: teamIds[0], team2: teamIds[1], status: 
 				'SETUP'})
-			console.log("GAME OBJ: ", gameObj)
 			database.ref(`games/${code}`).set(gameObj)
 		
 		})
 
 		
+	},
+
+	iterateThroughPlayers: () => {
+
 	},
 
 	getPlayerGame: (userId) => {
@@ -53,7 +58,8 @@ const utilFunctions = {
 
 		// game listener
 		database.ref(`games/${gameCode}`).on('value', snapshot => {
-			store.dispatch(setGame(snapshot.val()));
+			const val = snapshot.val()|| {} 
+			store.dispatch(setGame(val));
     	});
 
 
@@ -64,6 +70,7 @@ const utilFunctions = {
 			gamePlayers.forEach((player) => {
 				orderedPlayers[player.key] = player.val()
 			});
+			store.dispatch(setPlayers(orderedPlayers))
     	});
 
     	// gameTeams listener
@@ -77,7 +84,6 @@ const utilFunctions = {
 	createGameStatusListener: (gameCode) => {
 		database.ref(`games/${gameCode}/status`).on('value', snapshot => {
 			let status = snapshot.val()
-			console.log("BROWSER HISTORY: ", browserHistory)
 			switch(status){
 				case "DASHBOARD":
 					browserHistory.push('/dashboard')
@@ -91,14 +97,12 @@ const utilFunctions = {
 		let players = [];
 
 		for(var player in playersObj){
-			console.log("player: ", player)
 			players.push({id: player, name: playersObj[player]})
 		}
 		return players
 	},
 
 	getGameInfo: (gameCode) => {
-		console.log("GET GAME INFO!")
 		database.ref('games/' + gameCode).once('value')
 		.then(snapshot => store.dispatch(setGame(snapshot.val())))
 
@@ -111,7 +115,8 @@ const utilFunctions = {
 			store.dispatch(setPlayers(orderedPlayers))
 		})
 	},
-
+	//TODO: since we really don't want any of the userInfo on fb to persist if a game is ended im gonna just delete the player for now when they end a game
+	//TODO: would like to talk about why we wouldn't want to delete the player?
 	getUserAndGameInfo: () => {
 	  auth.onAuthStateChanged(function(user) {
 		  if (user) {
@@ -132,7 +137,6 @@ const utilFunctions = {
 		    })
 		  }
 		  else {
-		  	// console.log("NO USER YET")
 		    auth.signInAnonymously().catch(function(error) {
 		      // Handle Errors here.
 		      var errorCode = error.code;
@@ -148,7 +152,8 @@ const utilFunctions = {
 		database.ref('gamePlayers/' + gameCode).child(userId).set({
 			timestamp: firebase.database.ServerValue.TIMESTAMP,
 			name: username
-		})			
+		})
+					
 	},
 
 
@@ -158,8 +163,8 @@ const utilFunctions = {
 		database.ref('players/' + userId).once('value')
 		.then(snapshot => {
 			let updatedPlayer = Object.assign({}, snapshot.val(), keyValObj) //snapshot.val() equivalent to res.data
-			console.log('key value object', keyValObj)
 			database.ref('players/' + userId).set(updatedPlayer)
+			.then(() => store.dispatch(authenticated(updatedPlayer)))
 		})
 	},
 
@@ -179,9 +184,21 @@ const utilFunctions = {
 			} else return false //else return null so we can let the user know that they've already submitted a word
 		})
 	},
-
+	//TODO: is it ok to use browserHistory.push in this file?
+	leaveGame: (userId) => {
+		database.ref('gamePlayers/' + userId).remove()
+		browserHistory.push('/')
+	},
+	deleteGame: (gameId, userId) => {
+		console.log('DELETING GAME')
+		database.ref('games/' + gameId).remove()
+		.then(() => {
+			database.ref('players/' + userId).set({id: userId})})
+		.then(() => browserHistory.push('/'))
+	}
 }
 
 export default utilFunctions
 
 
+//TODO: numPlayers needs to increment when player is added or is it not counting the admin or is it not needed at all?
