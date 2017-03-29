@@ -31,9 +31,8 @@ export class PreStart extends Component{
             <div> PLAYERS ({playerKeys.length}) </div>
         		{playerKeys.map((player, i) => {
                 return <div key={i}>{players[player].name}</div>
-              })
-            }
-        		<button disabled={playerKeys.length < 4} onClick={this.makeTeams}> MAKE TEAMS </button>
+            })}
+        		{user.isAdmin ? <button disabled={playerKeys.length < 4} onClick={this.makeTeams}> MAKE TEAMS </button> : null}
         	</div>
       	)
       }

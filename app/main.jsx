@@ -51,7 +51,7 @@ render (
         <Route path="createGame" component={CreateGameContainer}></Route>
         <Route path="code" component={CodeView}></Route>
         <Route path="registerPlayer" component={RegisterPlayerContainer}></Route>
-        <Route path="prestart" component={PreStart}></Route>
+        <Route path="joined" component={PreStart}></Route>
         <Route path="teamalert" component={TeamAlert}></Route>
         <Route path="dashboard" component={Dashboard}></Route>
       </Route>

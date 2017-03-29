@@ -33,26 +33,30 @@ export class Dashboard extends Component{
 
   render(){
     let team = this.props.user && this.props.teams[this.props.user.team]
-  	let players = this.props.players
+    let players = this.props.players
     let user = this.props.user
     console.log("USER IS CAPTAIN: ", user)
-    return (
-    	<div>
-      YOU ARE IN THE DASHBOARD
-      {this.state.edit ? <EditTeamName saveName={this.saveName} teamName={team && team.name}></EditTeamName> : <div> MY TEAM: {team && team.name}</div>}
-      {user && user.isCaptain ? <div> TEAM CAPTAIN </div> : <div> YOUR CAPTAIN IS: {team && players[team.captain].name} </div>}
-      {user && user.isCaptain ? <button onClick={this.toggleEdit}> UPDATE TEAM NAME </button> : null}
-      {team && team.players ? team.players.map(player => {
-        return (<div key={player}> {this.props.players[player].name} </div>)
-      }) : null}
-         
-      {/*<div className="teamDisplay"> Game: {this.props.game.name} </div>
-      		<div> CODE: {this.props.game.code}</div>
-          <div> PLAYERS ({this.props.players.length}) </div>
-      		{this.props.players.map(player => (<div>{player.name}</div>))}
-      {this.props.user && this.props.user.isAdmin ? <button onClick={makeTeams}> MAKE TEAMS </button> : null}*/}
-      </div>
-    )
+    if(user && team && players){
+      return (
+        <div>
+        YOU ARE IN THE DASHBOARD
+        {this.state.edit ? <EditTeamName saveName={this.saveName} teamName={team.name}></EditTeamName> : <div> MY TEAM: {team.name}</div>}
+        {user.isCaptain ? <div> TEAM CAPTAIN </div> : <div> YOUR CAPTAIN IS: {players[team.captain].name} </div>}
+        {user.isCaptain ? <button onClick={this.toggleEdit}> UPDATE TEAM NAME </button> : null}
+        {team.players ? team.players.map(player => {
+          return (<div key={player}> {this.props.players[player].name} </div>)
+        }) : null}
+        {user.isAdmin ? <button onClick={() => this.props.endGame(this.props.game.code, this.props.user.id)}> END GAME </button> 
+        : <button onClick={this.props.leaveGame}> LEAVE GAME </button>}
+        {/*<div className="teamDisplay"> Game: {this.props.game.name} </div>
+            <div> CODE: {this.props.game.code}</div>
+            <div> PLAYERS ({this.props.players.length}) </div>
+            {this.props.players.map(player => (<div>{player.name}</div>))}
+        {this.props.user && this.props.user.isAdmin ? <button onClick={makeTeams}> MAKE TEAMS </button> : null}*/}
+        </div>
+      )
+    }
+    return null
   }
 }
 

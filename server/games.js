@@ -39,22 +39,23 @@ router.get('/code', (req, res, next) => {
 router.get('/make_teams/:code', (req, res, next) => {
 	const {code} = req.params
 
-	let gameInfo = database.ref('games/' + code).once('value')
-	let gamePlayers = database.ref('gamePlayers/' + code).once('value')
+	let teamInfo = database.ref(`games/${code}/teams`).once('value')
+	let gamePlayers = database.ref(`games/${code}/players`).once('value')
 
-	return Promise.all([gameInfo, gamePlayers])
+	return Promise.all([teamInfo, gamePlayers])
 	.then(resp => {
-		let game = resp[0]
+		let teams = resp[0]
 		let players = resp[1]
-		const {team1, team2} = game.val()
 		const {team1Players, team2Players} = splitPlayersIntoTeams(players.val())
+		console.log("team1Players: ", team1Players)
+		console.log("team2Players: ", team2Players)
 
 		let Team1Promise = Promise.map(team1Players, (player, i) => {
-			setTeamsAndCaptains(player, i, code, team1)
+			setTeamsAndCaptains(player, i, code, 'team1')
 		})
 
 		let Team2Promise = Promise.map(team2Players, (player, i) => {
-			setTeamsAndCaptains(player, i, code, team2)
+			setTeamsAndCaptains(player, i, code, 'team2')
 		})
 
 		return Promise.all([Team1Promise, Team2Promise])
@@ -68,7 +69,7 @@ router.get('/make_teams/:code', (req, res, next) => {
 		})
 		.then(() => {
 			console.log("about to set dashboard")
-			setTimeout(() => database.ref(`games/${code}/status`).set('DASHBOARD'), 7000)
+			setTimeout(() => database.ref(`games/${code}/status`).set('DASHBOARD'), 5000)
 		})
 		.then(() => res.send('done'))
 

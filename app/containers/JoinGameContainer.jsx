@@ -22,7 +22,7 @@ export class JoinGameContainer extends Component {
     .then(game => {
       // better user alert
       // console.log("GAME WHEN JOINING: ", game.val())
-      if(!game.val()){
+      if(!game.val() || game.val().status !== "SETUP"){
         alert('No game associated with this code')
       }
       else{
@@ -30,7 +30,7 @@ export class JoinGameContainer extends Component {
         createGameListener(this.state.game)
         addPlayerToGame(this.props.user.id, this.state.name, this.state.game)
         this.props.setGame(game.val())
-        browserHistory.push('/prestart')
+        browserHistory.push('/joined')
       }
     })
   }

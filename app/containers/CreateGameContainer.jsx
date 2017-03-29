@@ -7,7 +7,7 @@ import {setGame} from '../reducers/game'
 import {authenticated} from '../reducers/auth'
 import manager from 'APP/utils/manager'
 
-const {registerGame, makeAdmin, updatePlayer} = manager
+const {addAdminToGame, registerGame, createGameListener, makeAdmin, updatePlayer} = manager
 
 
 export class CreateGameContainer extends Component {
@@ -18,7 +18,6 @@ export class CreateGameContainer extends Component {
         name: '',
         rounds: '',
         duration: '',
-        admin: props.user? props.user.id : ''
     };
     this.createGame = this.createGame.bind(this)
     this.handleChange = this.handleChange.bind(this);
@@ -26,17 +25,22 @@ export class CreateGameContainer extends Component {
   
   //MAYBE: update FB 
   createGame(evt) {
+    let user = this.props.user
     evt.preventDefault()
     axios.get('/api/games/code')
     .then(res => res.data)
     .then(code => {
       console.log("THIS IS MY GAME CODE: ", code)
       this.setState({code})
-      registerGame(this.state, code)
+      registerGame(this.state, code, this.props.user.id)
+      .then(() => {
+        createGameListener(code)
+        addAdminToGame(user.id, code)
+      })
       // add game listener instead of setting game manually
-      this.props.setGame(this.state)
-      makeAdmin(this.props.user.id)
-      updatePlayer(this.props.user.id, {game: code})
+      // this.props.setGame(this.state)
+      // makeAdmin(this.props.user.id)
+      // updatePlayer(this.props.user.id, {game: code})
       browserHistory.push('/registerPlayer')
     })
 

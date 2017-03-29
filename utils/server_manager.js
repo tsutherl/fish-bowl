@@ -47,16 +47,17 @@ module.exports = {
 	},
 
 	setTeamsAndCaptains: (playerId, playerNum, code, teamId) => {
-		// console.log("PLAYER BEFORE SETTING: ", playerId)
-		// console.log("PLAYER NUM: ", playerNum)
+		console.log("PLAYER BEFORE SETTING: ", playerId)
+		console.log("PLAYER NUM: ", playerNum)
+		console.log("TEAM : ", teamId)
 		
-		let gameTeams = database.ref(`gameTeams/${code}/${teamId}/players/${playerNum}`).set(playerId)
+		let gameTeams = database.ref(`games/${code}/teams/${teamId}/players/${playerNum}`).set(playerId)
 		let player = database.ref(`players/${playerId}/team`).set(teamId)
 		let promiseArr = [gameTeams, player]
 		console.log("PLAYER NUM: ", playerNum)
 		if(!playerNum){
 			console.log("INSIDE CONDITIONAL")
-			promiseArr.push(database.ref(`gameTeams/${code}/${teamId}/captain`).set(playerId))
+			promiseArr.push(database.ref(`games/${code}/teams/${teamId}/captain`).set(playerId))
 			promiseArr.push(database.ref(`players/${playerId}/isCaptain`).set(true))
 		}
 

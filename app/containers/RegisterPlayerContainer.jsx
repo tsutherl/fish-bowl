@@ -12,7 +12,7 @@ const {addPlayerToGame, updatePlayer, createGameListener} = manager
 export class RegisterPlayerContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {name: '', wordsSubmitted: 0}
+    this.state = {name: ''}
     this.saveUser = this.saveUser.bind(this)
     this.handleChange = this.handleChange.bind(this);
   }
@@ -20,10 +20,7 @@ export class RegisterPlayerContainer extends Component {
   //TODO: i think make game listener last might fix things
   saveUser(evt) {
     evt.preventDefault()
-    addPlayerToGame(this.props.user.id, this.state.name, this.props.game.code)
-    updatePlayer(this.props.user.id, this.state)
-    createGameListener(this.props.game.code)
-
+    updatePlayer(this.props.user, this.state, true)
     browserHistory.push('/code')
   }
 

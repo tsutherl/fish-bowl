@@ -7,7 +7,7 @@ export const CodeView = props => {
       <div>
         <div> Share this code with friends </div>
         <h1> {props.game.code} </h1>
-        <button onClick={()=>{browserHistory.push('/prestart')}}> GO TO DASHBOARD </button>
+        <button onClick={()=>{browserHistory.push('/joined')}}> GO TO DASHBOARD </button>
       </div>
     )
 }
