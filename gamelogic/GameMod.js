@@ -19,7 +19,7 @@ QUESTIONS:
 const { shuffle } = require('./utils')
 const Timer = require('./Timer')
 
-class GameMod {
+module.exports = class GameMod {
 
   constructor(gameid) {
     this.id = gameid // id, as in firebase database id
@@ -95,6 +95,3 @@ class GameMod {
   }
 
 }
-
-module.exports = GameMod
-

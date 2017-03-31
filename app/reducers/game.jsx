@@ -3,6 +3,7 @@ const initialState = {}
 const reducer = (state=initialState, action) => {
   switch(action.type) {
   case SET_GAME:
+  console.log('are we tryingg to set game wrong:::::???????', action.game)
     return action.game
   }
   return state
