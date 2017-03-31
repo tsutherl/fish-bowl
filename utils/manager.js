@@ -47,6 +47,7 @@ const utilFunctions = {
 	},
 
 	createPlayerListener: (userId) => {
+
 		database.ref(`players/${userId}`).on('value', snapshot => {
 			store.dispatch(authenticated(snapshot.val()));
     	});
@@ -55,7 +56,6 @@ const utilFunctions = {
 
 	// When game, gamePlayers, or gameTeams changes, updates will be dispatched to store
 	createGameListener: (gameCode) => {
-
 		// game listener
 		database.ref(`games/${gameCode}`).on('value', snapshot => {
 			const val = snapshot.val()|| {} 
@@ -65,7 +65,6 @@ const utilFunctions = {
 
 		// gamePlayers listener
     	database.ref(`gamePlayers/${gameCode}`).orderByChild('timestamp').on('value', gamePlayers => {
-
 			const orderedPlayers = {};
 			gamePlayers.forEach((player) => {
 				orderedPlayers[player.key] = player.val()
@@ -85,6 +84,12 @@ const utilFunctions = {
 		database.ref(`games/${gameCode}/status`).on('value', snapshot => {
 			let status = snapshot.val()
 			switch(status){
+				case "PLAYERS_JOINING":
+					browserHistory.push('/prestart')
+					break;
+				case "TEAM_ASSIGNED":
+					browserHistory.push('/teamalert')
+					break;
 				case "DASHBOARD":
 					browserHistory.push('/dashboard')
 					break;
@@ -104,7 +109,9 @@ const utilFunctions = {
 
 	getGameInfo: (gameCode) => {
 		database.ref('games/' + gameCode).once('value')
-		.then(snapshot => store.dispatch(setGame(snapshot.val())))
+		.then(snapshot => {
+			store.dispatch(setGame(snapshot.val()))
+		})
 
 		database.ref('gamePlayers/' + gameCode).orderByChild('timestamp').once('value')
 		.then(gamePlayers => {
@@ -147,8 +154,7 @@ const utilFunctions = {
 	},
 
 	addPlayerToGame: (userId, username, gameCode) => {
-		// database.ref('gamePlayers/' + gameCode).child(userId).set(username)
-		// I think this is creating an error
+
 		database.ref('gamePlayers/' + gameCode).child(userId).set({
 			timestamp: firebase.database.ServerValue.TIMESTAMP,
 			name: username

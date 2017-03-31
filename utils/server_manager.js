@@ -33,7 +33,7 @@ module.exports = {
 	splitPlayersIntoTeams: (players) => {
 		const playersArr = Object.keys(players)
 		// for(key in players){
-			
+
 		// 	let player = {}
 		// 	player[key] = players[key]
 		// 	console.log("********** THIS IS A PLAYER *********** ", player)
@@ -49,13 +49,13 @@ module.exports = {
 	setTeamsAndCaptains: (playerId, playerNum, code, teamId) => {
 		// console.log("PLAYER BEFORE SETTING: ", playerId)
 		// console.log("PLAYER NUM: ", playerNum)
-		
+
 		let gameTeams = database.ref(`gameTeams/${code}/${teamId}/players/${playerNum}`).set(playerId)
 		let player = database.ref(`players/${playerId}/team`).set(teamId)
 		let promiseArr = [gameTeams, player]
-		console.log("PLAYER NUM: ", playerNum)
+		// console.log("PLAYER NUM: ", playerNum)
 		if(!playerNum){
-			console.log("INSIDE CONDITIONAL")
+			// console.log("INSIDE CONDITIONAL")
 			promiseArr.push(database.ref(`gameTeams/${code}/${teamId}/captain`).set(playerId))
 			promiseArr.push(database.ref(`players/${playerId}/isCaptain`).set(true))
 		}
@@ -63,10 +63,10 @@ module.exports = {
 		return Promise.all(promiseArr)
 
 
-		
+
 		// database.ref(`players/${playerId}`).once('value')
 		// .then(playerInfo => {
-		// 	// if admin make 
+		// 	// if admin make
 
 
 		// 	if(playerInfo.val().isAdmin){

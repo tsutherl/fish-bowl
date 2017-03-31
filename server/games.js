@@ -5,6 +5,7 @@ const myFirebase = require('APP/utils/database')
 const firebase = myFirebase.firebase
 const database = myFirebase.database
 const auth = myFirebase.auth
+const browserHistory = require('react-router').browserHistory
 const router = require('express').Router()
 const crypto = require('crypto')
 const serverManager = require('../utils/server_manager')
@@ -21,20 +22,20 @@ function findUniqueCode(){
 
 router.get('/code', (req, res, next) => {
 	findUniqueCode()
-	.then(code => { 
+	.then(code => {
 		// console.log("CODE BEFORE RES.SEND: ", code)
 		res.send(code)
 	})
 })
 
 // Randomly assign players to two teams
-// Method 1: 
+// Method 1:
 // Convert object of players to an array
 // Shuffle array and split it at the middle
 
-// Method 2: 
+// Method 2:
 // Loop through each player
-// assign to team 
+// assign to team
 router.get('/make_teams/:code', (req, res, next) => {
 	const {code} = req.params
 
@@ -57,6 +58,18 @@ router.get('/make_teams/:code', (req, res, next) => {
 		})
 
 		return Promise.all([Team1Promise, Team2Promise])
+		// .then(() => {
+		// 	console.log("about to push to dashboard")
+		// 	return database.ref(`games/${code}/status`).set('DASHBOARD')
+		// })
+		.then(() => {
+			// console.log("about to push to team assigned")
+			return database.ref(`games/${code}/status`).set('TEAM_ASSIGNED')
+		})
+		.then(() => {
+			// console.log("about to set dashboard")
+			setTimeout(() => database.ref(`games/${code}/status`).set('DASHBOARD'), 7000)
+		})
 		.then(() => res.send('done'))
 
 		// for(let i = 0; i < team1Players.length; i++){
@@ -66,7 +79,7 @@ router.get('/make_teams/:code', (req, res, next) => {
 		// for(let i = 0; i < team2Players.length; i++){
 		// 	setTeamsAndCaptains(team2Players[i], i, code, team2)
 		// }
-		
+
 	})
 	// database.ref('games/' + code).once('value')
 	// .then(snapshot => {
@@ -77,14 +90,14 @@ router.get('/make_teams/:code', (req, res, next) => {
 	// 	.then(snapshot => {
 	// 		const players = snapshot.val()
 	// 		const {team1Players, team2Players} = splitPlayersIntoTeams(players)
-			
+
 	// 		for(let i = 0; i < team1Players.length; i++){
 	// 			setTeamsAndCaptains(team1Players[i], code)
 	// 		}
 	// 		team1Players.forEach((player) => {
 	// 			database.ref('/players' + player).once('value')
 	// 			.then(playerInfo => {
-	// 				// if admin make 
+	// 				// if admin make
 	// 				if(playerInfo.val().isAdmin){
 
 	// 				}
@@ -96,4 +109,4 @@ router.get('/make_teams/:code', (req, res, next) => {
 })
 
 
-module.exports = router 
+module.exports = router

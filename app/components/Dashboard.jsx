@@ -10,28 +10,58 @@ const {leaveGame, deleteGame} = manager
 export class Dashboard extends Component{
 	constructor(props){
 		super(props)
+    this.state = {
+      edit: false
+    }
+    this.toggleEdit = this.toggleEdit.bind(this)
+    this.saveName = this.saveName.bind(this)
 	}
 
-    render(){
-      let team = this.props.user && this.props.teams[this.props.user.team]
-    	return (
-    		<div>
-        YOU ARE IN THE DASHBOARD
-        {team ? <div> MY TEAM: {team.name}</div> : null}
-        {team && team.players ? team.players.map(player => {
-          return (<div key={player}> {this.props.players[player].name} </div>)
-        }) : null}
-        {this.props.user && this.props.user.isAdmin? <button onClick={() => this.props.endGame(this.props.game.code, this.props.user.id)}> END GAME </button> : <button onClick={this.props.leaveGame}> LEAVE GAME </button>}
-        
-      		{/*<div className="teamDisplay"> Game: {this.props.game.name} </div>
+  toggleEdit(){
+    this.setState({edit: !this.state.edit})
+  }
+
+  saveName(e){
+    e.preventDefault()
+    // should I just do database.ref.set() or should I hit a backend route that will set the data?
+    this.toggleEdit()
+  }
+
+  handleChange(e){
+
+  }
+
+  render(){
+    let team = this.props.user && this.props.teams[this.props.user.team]
+  	let players = this.props.players
+    let user = this.props.user
+    // console.log("USER IS CAPTAIN: ", user)
+    return (
+    	<div>
+      YOU ARE IN THE DASHBOARD
+      {this.state.edit ? <EditTeamName saveName={this.saveName} teamName={team && team.name}></EditTeamName> : <div> MY TEAM: {team && team.name}</div>}
+      {user && user.isCaptain ? <div> TEAM CAPTAIN </div> : <div> YOUR CAPTAIN IS: {team && players[team.captain].name} </div>}
+      {user && user.isCaptain ? <button onClick={this.toggleEdit}> UPDATE TEAM NAME </button> : null}
+      {team && team.players ? team.players.map(player => {
+        return (<div key={player}> {this.props.players[player].name} </div>)
+      }) : null}
+
+      {/*<div className="teamDisplay"> Game: {this.props.game.name} </div>
       		<div> CODE: {this.props.game.code}</div>
           <div> PLAYERS ({this.props.players.length}) </div>
       		{this.props.players.map(player => (<div>{player.name}</div>))}
-      		{this.props.user && this.props.user.isAdmin ? <button onClick={makeTeams}> MAKE TEAMS </button> : null}*/}
-      	</div>
-    	)
-    }
+      {this.props.user && this.props.user.isAdmin ? <button onClick={makeTeams}> MAKE TEAMS </button> : null}*/}
+      </div>
+    )
+  }
 }
+
+export const EditTeamName = props => (
+  <form onSubmit={props.saveName}>
+    <input placeholder={props.teamName}></input>
+    <input type="submit"></input>
+  </form>
+)
 
 export default connect(
 	({game, user, players, teams}) => ({game, user, players, teams}),

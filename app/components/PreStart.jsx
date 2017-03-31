@@ -14,23 +14,30 @@ export class PreStart extends Component{
   makeTeams(){
     const {game} = this.props
     axios.get(`/api/games/make_teams/${game.code}`)
-    .then(() => database.ref(`games/${game.code}/status`).set('DASHBOARD'))
+    // .then(() => database.ref(`games/${game.code}/status`).set('DASHBOARD'))
   }
 
     render(){
       let players = this.props.players
-    	return (
-    		<div>
-      		<div className="teamDisplay"> Game: {this.props.game.name} </div>
-      		<div> CODE: {this.props.game.code}</div>
-          <div> PLAYERS ({Object.keys(players).length}) </div>
-      		{players ? Object.keys(players).map((player, i) => {
-              return <div key={i}>{players[player].name}</div>
-            }) : null
-          }
-      		{this.props.user && this.props.user.isAdmin ? <button onClick={this.makeTeams}> MAKE TEAMS </button> : null}
-      	</div>
-    	)
+      let playerKeys = Object.keys(players)
+      let user = this.props.user
+
+      if(user && players){
+      	return (
+    
+      		<div>
+        		<div className="teamDisplay"> Game: {this.props.game.name} </div>
+        		<div> CODE: {this.props.game.code}</div>
+            <div> PLAYERS ({playerKeys.length}) </div>
+        		{playerKeys.map((player, i) => {
+                return <div key={i}>{players[player].name}</div>
+              })
+            }
+        		<button disabled={playerKeys.length < 4} onClick={this.makeTeams}> MAKE TEAMS </button>
+        	</div>
+      	)
+      }
+      return null
     }
 }
 
