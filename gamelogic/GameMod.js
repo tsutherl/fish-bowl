@@ -25,16 +25,16 @@ module.exports = class GameMod {
     this.id = gameid // id, as in firebase database id
     this.timer = new Timer(gameid) //give the mod a stopwatch that broadcasts ticks thru fb
 
-    this.words = []
-    this.gameOver = false
-    this.gameRunning = false
+    // this.words = []
+    // this.gameOver = false
+    // this.gameRunning = false
 
-    this.teamA = []
-    this.teamB = []
-    this.round = 0
-    this.sprintDuration = 120 // hardcoded for now
+    // this.teamA = []
+    // this.teamB = []
+    // this.round = 0
+    // this.sprintDuration = 120 // hardcoded for now
 
-    database.ref
+    // database.ref
   }
 
   startGame() {

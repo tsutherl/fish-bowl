@@ -4,7 +4,7 @@ const express = require('express')
 const router = require('express').Router()
 const Promise = require('bluebird')
 
-const { findUniqueCode } = require('../utils/theRealUtils')
+const findUniqueCode = require('../utils/theRealUtils')
 const GameMod = require('../gamelogic/GameMod')
 
 // just a table to hold all the current mods.
@@ -21,14 +21,15 @@ module.exports = router
 .get('/code', (req, res, next) => {
   findUniqueCode()
   .then(code => {
-    gameMods.code = new GameMod(code)
+    allGameMods.code = new GameMod(code)
     res.send(code)
   })
+  .catch(next)
 })
 
 .param('code', (req, res, next, code) => {
-  if (gameMods.code) {
-    req.moderator = gameMods.code
+  if (allGameMods.code) {
+    req.moderator = allGameMods.code
     next()
   }
   else {
