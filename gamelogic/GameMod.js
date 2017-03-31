@@ -2,29 +2,18 @@
 
 table of contents
   GameMod
-    startGame
-    timer functions
-    handling sprints
-    handling rounds
-    endGame
+    - startGame
+    - handling sprints
+    - handling rounds
+    - endGame
 
-game moderator makes sure the game is going alllll according to plan :)
-responsible for things like finalizing roster, shuffling, and telling everyone next stage of game
+game mod makes sure the game is going alllll according to plan
 initialize 1 GameMod instance for every game that starts.
 
-we can set up some backend server routes, which when hit, will invoke the appropriate methods
-so something that works like....
-i.e.
-  a post request to api/game/:gameid/start with req.body = {players = ['tati', 'ally', 'jenny']}
-  -->
-  const game001 = new GameMod(req.params.gameid)
-  game001.players = req.body.players
-
-
 QUESTIONS:
- - should probably use redux on the backend to handle collisions rathe than just use oop?
- - what info should the players write directly to firebase vs be sent directly to server instead?
- - should the firebase updating happen in some different module (a database manager like firechief??)
+- where should each gamemod object exist???
+- which info should come from firebase changes vs api server hits
+
 */
 
 const { shuffle } = require('./utils')
@@ -34,8 +23,8 @@ class GameMod {
 
   constructor(gameid) {
     this.id = gameid // id, as in firebase database id
-    this.timer = new Timer(gameid) //give the mod a stopwatch that makes public announcments thru fb
-    this.players = []
+    this.timer = new Timer(gameid) //give the mod a stopwatch that broadcasts ticks thru fb
+
     this.words = []
     this.gameOver = false
     this.gameRunning = false
@@ -45,10 +34,7 @@ class GameMod {
     this.round = 0
     this.sprintDuration = 120 // hardcoded for now
 
-    // todo: log into the firebase so this new game mod is authorized to alter db. we can do it anonymously? depends on how much we want to secure editing permissions
-
-    // firebase.auth().signInWithEmailAndPassword(email, password)
-    // .then(() => do something or another or nothing )
+    database.ref
   }
 
   startGame() {

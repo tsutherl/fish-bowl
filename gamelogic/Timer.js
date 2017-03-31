@@ -20,10 +20,10 @@ module.exports = class Timer {
   }
 
   tick() { // a public tick that's broadcasted to everyone
-    // as long as there's more than 0 seconds left, tick away
+    // as long as there's more than 0 seconds left, tick away 1 sec at a time.
     if this.timeLeft = this.timeLeft--
     // assuming that database = firebase.database()
-    // this is going to run down the timer every second. everyone should be subscribed to changes on this key!
+    // everyone should be subscribed to changes on this key! so they can hear the almighty timer
     database.ref(`sprints/${this.game}/timeRemaining`).set(this.timeLeft)
   }
 }

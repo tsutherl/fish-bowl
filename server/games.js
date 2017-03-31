@@ -2,22 +2,18 @@
 
 const db = require('APP/db')
 const router = require('express').Router()
-const crypto = require('crypto')
-const checkCode = require('../utils/server_manager').checkCode
 
+const { findUniqueCode } = require('../utils/theRealUtils')
 
-function findUniqueCode(){
-	let gameCode = crypto.randomBytes(2).toString('hex')
-	const checkCodeRes = checkCode(gameCode, findUniqueCode)
-	return checkCodeRes
-}
+module.exports = router
 
-router.get('/code', (req, res, next) => {
-	findUniqueCode()
-	.then(code => {
-		// console.log("CODE BEFORE RES.SEND: ", code)
-		res.send(code)
-	})
+router
+
+// need to get a code to start any gamespace
+.get('/code', (req, res, next) => {
+  findUniqueCode()
+  .then(code => {
+    res.send(code)
+  })
 })
 
-module.exports = router 
