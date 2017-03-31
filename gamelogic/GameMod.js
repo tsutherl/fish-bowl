@@ -15,7 +15,7 @@ initialize 1 GameMod instance for every game that starts.
 we can set up some backend server routes, which when hit, will invoke the appropriate methods
 so something that works like....
 i.e.
-  a post request to api/game/:gameid/start with req.body = {players = ['tati', 'ally', 'dillon']}
+  a post request to api/game/:gameid/start with req.body = {players = ['tati', 'ally', 'jenny']}
   -->
   const game001 = new GameMod(req.params.gameid)
   game001.players = req.body.players
@@ -28,13 +28,13 @@ QUESTIONS:
 */
 
 const { shuffle } = require('./utils')
-const PublicTimer = require('./PublicTimer')
+const Timer = require('./Timer')
 
 class GameMod {
 
   constructor(gameid) {
     this.id = gameid // id, as in firebase database id
-    this.timer = new PublicTimer(gameid) //give the mod a stopwatch that makes public announcments thru fb
+    this.timer = new Timer(gameid) //give the mod a stopwatch that makes public announcments thru fb
     this.players = []
     this.words = []
     this.gameOver = false
@@ -45,7 +45,7 @@ class GameMod {
     this.round = 0
     this.sprintDuration = 120 // hardcoded for now
 
-    // todo: log into the firebase so this new game mod is authorized to alter db. we can do it anonymously, but its probably better to do credentialed login? depends on how much we want to secure editing permissions
+    // todo: log into the firebase so this new game mod is authorized to alter db. we can do it anonymously? depends on how much we want to secure editing permissions
 
     // firebase.auth().signInWithEmailAndPassword(email, password)
     // .then(() => do something or another or nothing )
@@ -71,12 +71,12 @@ class GameMod {
     // todo: if ALL the words have been guessed, end the sprint and the round immediately
 
     // start the timer with the right amount of time
-    this.timer.startTimer(this.sprintDuration)
+    this.timer.start(this.sprintDuration)
   }
 
   endSprint() {
     // stop the ticking of the clock
-    this.timer.stopTimer()
+    this.timer.stop()
     // todo: quit listening to this person's guesses (or the frontend react could just not allow form submissions anymore)
 
     // it's going to be the next team's turn!
