@@ -28,14 +28,14 @@ export class Dashboard extends Component{
   }
 
   handleChange(e){
-    
+
   }
 
   render(){
     let team = this.props.user && this.props.teams[this.props.user.team]
   	let players = this.props.players
     let user = this.props.user
-    console.log("USER IS CAPTAIN: ", user)
+    // console.log("USER IS CAPTAIN: ", user)
     return (
     	<div>
       YOU ARE IN THE DASHBOARD
@@ -45,7 +45,7 @@ export class Dashboard extends Component{
       {team && team.players ? team.players.map(player => {
         return (<div key={player}> {this.props.players[player].name} </div>)
       }) : null}
-         
+
       {/*<div className="teamDisplay"> Game: {this.props.game.name} </div>
       		<div> CODE: {this.props.game.code}</div>
           <div> PLAYERS ({this.props.players.length}) </div>
