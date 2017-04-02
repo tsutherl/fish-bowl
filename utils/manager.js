@@ -229,6 +229,7 @@ const utilFunctions = {
 	//TODO: is it ok to use browserHistory.push in this file?
 	leaveGame: (gameCode, userId) => {
 		database.ref(`games/${gameCode}/players/${userId}`).remove()
+		database.ref(`players/${userId}/game`).remove()
 		browserHistory.push('/')
 	},
 	deleteGame: (gameId, userId) => {

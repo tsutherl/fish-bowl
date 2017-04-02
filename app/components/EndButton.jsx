@@ -15,10 +15,10 @@ export class EndButton extends Component{
   render(){
     let user = this.props.user
     if(user && user.isAdmin){
-      return <button onClick={deleteGame(user.game, user.id)}> END GAME </button>
+      return <button onClick={() => deleteGame(user.game, user.id)}> END GAME </button>
     }
     else if(user){
-      return <button onClick={leaveGame(user.game, user.id)}> LEAVE GAME </button>
+      return <button onClick={() => leaveGame(user.game, user.id)}> LEAVE GAME </button>
     }
     else return null
     

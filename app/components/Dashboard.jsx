@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router'
 import manager from 'APP/utils/manager'
+import EndButton from './EndButton'
 
 const {leaveGame, deleteGame} = manager
 
@@ -32,7 +33,7 @@ export class Dashboard extends Component{
   }
 
   render(){
-    let team = this.props.user && this.props.teams[this.props.user.team]
+    let team = this.props.user && this.props.game && this.props.teams[this.props.user.team]
     let players = this.props.players
     let user = this.props.user
     console.log("USER IS CAPTAIN: ", user)
@@ -46,13 +47,7 @@ export class Dashboard extends Component{
         {team.players ? team.players.map(player => {
           return (<div key={player}> {this.props.players[player].name} </div>)
         }) : null}
-        {user.isAdmin ? <button onClick={() => this.props.endGame(this.props.game.code, this.props.user.id)}> END GAME </button> 
-        : <button onClick={this.props.leaveGame}> LEAVE GAME </button>}
-        {/*<div className="teamDisplay"> Game: {this.props.game.name} </div>
-            <div> CODE: {this.props.game.code}</div>
-            <div> PLAYERS ({this.props.players.length}) </div>
-            {this.props.players.map(player => (<div>{player.name}</div>))}
-        {this.props.user && this.props.user.isAdmin ? <button onClick={makeTeams}> MAKE TEAMS </button> : null}*/}
+        <EndButton />
         </div>
       )
     }
