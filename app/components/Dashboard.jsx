@@ -28,19 +28,16 @@ export class Dashboard extends Component{
     this.toggleEdit()
   }
 
-  handleChange(e){
-    
-  }
-
   render(){
-    let team = this.props.user && this.props.game && this.props.teams[this.props.user.team]
+    let teams = this.props.teams
+    let team = this.props.user && this.props.game && teams[this.props.user.team]
     let players = this.props.players
     let user = this.props.user
     console.log("USER IS CAPTAIN: ", user)
-    if(user && team && players){
+    if(user && Object.keys(teams).length && Object.keys(players).length) {
       return (
         <div>
-        YOU ARE IN THE DASHBOARD
+        DASHBOARD
         {this.state.edit ? <EditTeamName saveName={this.saveName} teamName={team.name}></EditTeamName> : <div> MY TEAM: {team.name}</div>}
         {user.isCaptain ? <div> TEAM CAPTAIN </div> : <div> YOUR CAPTAIN IS: {players[team.captain].name} </div>}
         {user.isCaptain ? <button onClick={this.toggleEdit}> UPDATE TEAM NAME </button> : null}

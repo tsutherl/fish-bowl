@@ -69,7 +69,11 @@ const utilFunctions = {
 	createGameListener: (gameCode) => {
 		// game listener
 		database.ref(`games/${gameCode}`).on('value', snapshot => {
-			const val = snapshot.val()|| {} 
+			const val = snapshot.val()|| {}
+			console.log("SNAPSHOT OF DELETED GAME: ", snapshot.val())
+			if(!snapshot.val()){
+				browserHistory.push('/')
+			} 
 			store.dispatch(setGame(val));
     	});
 
@@ -89,7 +93,8 @@ const utilFunctions = {
 
     	// gameTeams listener
     	database.ref(`games/${gameCode}/teams`).on('value', gameTeams => {
-    		store.dispatch(setTeams(gameTeams.val()))
+    		const val = gameTeams.val() || {}
+    		store.dispatch(setTeams(val))
     	})
 
     	utilFunctions.createGameStatusListener(gameCode)
@@ -237,7 +242,7 @@ const utilFunctions = {
 		database.ref(`games/${gameId}`).remove()
 		.then(() => {
 			database.ref(`players/${userId}`).set({id: userId})})
-		.then(() => browserHistory.push('/'))
+		// .then(() => browserHistory.push('/'))
 	}
 }
 
