@@ -109,5 +109,10 @@ router.get('/make_teams/:code', (req, res, next) => {
 	// })
 })
 
+router.put('/:gameId/teams/:team/name', (req, res, next) => {
+	database.ref(`games/${req.params.gameId}/teams/${req.params.team}`).update({name: req.body.teamName})
+	.then(() => res.send('done'))
+})
+
 
 module.exports = router 
