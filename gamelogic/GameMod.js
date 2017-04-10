@@ -15,9 +15,17 @@ QUESTIONS:
 - which info should come from firebase changes vs api server hits
 
 */
+const Promise = require('bluebird')
 
-const { shuffle } = require('./utils')
+const db = require('APP/db')
+const myFirebase = require('APP/utils/database')
+const firebase = myFirebase.firebase
+const database = myFirebase.database
+const auth = myFirebase.auth
+
 const Timer = require('./Timer')
+const { shuffle, splitPlayersIntoTeams} = require('./utils')
+const { setTeamsAndCaptains } = require('../utils/server_manager')
 
 module.exports = class GameMod {
 
@@ -25,16 +33,39 @@ module.exports = class GameMod {
     this.id = gameid // id, as in firebase database id
     this.timer = new Timer(gameid) //give the mod a stopwatch that broadcasts ticks thru fb
 
-    // this.words = []
-    // this.gameOver = false
-    // this.gameRunning = false
+    // subscribe it to firebase changes?
+  }
 
-    // this.teamA = []
-    // this.teamB = []
-    // this.round = 0
-    // this.sprintDuration = 120 // hardcoded for now
+  makeTeams() {
+    const code = this.id
+    let gameInfo = database.ref(`games/${code}`).once('value')
+    let gamePlayers = database.ref(`gamePlayers/${code}`).once('value')
 
-    // database.ref
+    return Promise.all([gameInfo, gamePlayers])
+    .then(resp => {
+      let game = resp[0]
+      let players = resp[1]
+      const {team1, team2} = game.val()
+      const {team1Players, team2Players} = splitPlayersIntoTeams(players.val())
+
+      let Team1Promise = Promise.map(team1Players, (player, i) => {
+        setTeamsAndCaptains(player, i, code, team1)
+      })
+
+      let Team2Promise = Promise.map(team2Players, (player, i) => {
+        setTeamsAndCaptains(player, i, code, team2)
+      })
+
+      return Promise.all([Team1Promise, Team2Promise])
+    })
+    .then(() => {
+      // console.log("about to push to team assigned")
+      return database.ref(`games/${code}/status`).set('TEAM_ASSIGNED')
+    })
+    .then(() => {
+      // console.log("about to set dashboard")
+      setTimeout(() => database.ref(`games/${code}/status`).set('DASHBOARD'), 7000)
+    })
   }
 
   startGame() {
